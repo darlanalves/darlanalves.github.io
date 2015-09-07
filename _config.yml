@@ -9,7 +9,9 @@ description:
 author:
 email: me@darlanalv.es
 language: en-US
-timezone:
+twitter_username: angularjsdev
+github_username: darlanalves
+facebook_username: darlanalv.es
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
@@ -76,6 +78,3 @@ deploy:
 
 # Disqus
 disqus_shortname: darlanalves
-
-# excludes node stuff
-exclude: ['package.json', 'src', 'node_modules']

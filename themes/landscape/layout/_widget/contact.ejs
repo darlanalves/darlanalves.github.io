@@ -1,0 +1,20 @@
+<div class="widget-wrap contact-widget">
+  <h3 class="widget-title">Contact</h3>
+  <div class="widget">
+    <% if (config.twitter_username){ %>
+    <a class="icon icon-tw" target="_blank" href="http://twitter.com/<%= config.twitter_username %>" title="Twitter"></a>
+    <% } %>
+
+    <% if (config.facebook_username){ %>
+    <a class="icon icon-fb" target="_blank" href="http://fb.com/<%= config.facebook_username %>" title="Facebook"></a>
+    <% } %>
+
+    <% if (config.github_username){ %>
+    <a class="icon icon-gh" target="_blank" href="http://github.com/<%= config.github_username %>" title="GitHub"></a>
+    <% } %>
+
+    <% if (config.email){ %>
+    <a class="icon icon-email" href="mailto:<%= config.email %>" title="E-mail"></a>
+    <% } %>
+  </div>
+</div>
