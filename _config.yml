@@ -4,9 +4,9 @@
 
 # Site
 title: Darlan Alves
-subtitle: Software artisan
+subtitle: Software craftsmanship and other stuff
 description:
-author: Darlan Alves
+author:
 email: me@darlanalv.es
 language: en-US
 timezone:
@@ -76,3 +76,6 @@ deploy:
 
 # Disqus
 disqus_shortname: darlan_alves
+
+# excludes node stuff
+exclude: ['package.json', 'src', 'node_modules']

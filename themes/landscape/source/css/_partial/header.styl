@@ -1,7 +1,8 @@
 #header
   height: banner-height
   position: relative
-  border-bottom: 1px solid color-border
+  border-bottom: 5px solid #FFF;
+
   &:before, &:after
     content: ""
     position: absolute
@@ -14,6 +15,12 @@
   &:after
     bottom: 0
     background: linear-gradient(transparent, rgba(0, 0, 0, 0.2))
+
+  @media mq-tablet
+    height: banner-height-tablet
+
+  @media mq-mobile
+    height: banner-height-mobile
 
 #header-outer
   height: 100%
@@ -29,17 +36,56 @@
   left: 0
   width: 100%
   height: 100%
-  background: url(banner-url) center #000
+  background: url(banner-url) bottom #000
   background-size: cover
   z-index: -1
 
+  @media mq-mobile
+    background-position: top
+    background-size: auto
+
 #header-title
-  text-align: center
+  text-align: left
   height: logo-size
   position: absolute
-  top: 50%
-  left: 0
-  margin-top: logo-size * -0.5
+  top: 78%
+  left: 180px
+  margin-top: 0
+
+  @media mq-mobile
+    top: 40%
+    text-align: center
+    left: 0
+
+  @media mq-tablet
+    left: 160px
+    top: 58%
+
+#header-avatar
+  position: absolute
+  left: 2%
+  top: 67%
+  width: 140px
+  height: 140px
+  border-radius: 5px
+  border: 5px solid white;
+  overflow: hidden
+  background: white url(https://scontent-gru1-1.xx.fbcdn.net/hphotos-xpf1/v/t1.0-9/11056635_871621186224983_6851937759371528498_n.jpg?oh=330c1be6d6746b3fa8bf3597957ddb10&oe=56A6A28E);
+  background-size: cover;
+  z-index: 3
+
+  @media mq-tablet
+    top: 35%
+    width: 120px
+    height: 120px
+
+  @media mq-mobile
+    left: 50%
+    top: 82%
+    margin-left: -50px
+    width: 100px
+    height: 100px
+    border-radius: 50%
 
 $logo-text
   text-decoration: none
@@ -60,7 +106,11 @@ $logo-text
   letter-spacing: 1px
 
 #subtitle-wrap
-  margin-top: subtitle-size
+  margin-left: 2px
+  margin-top: 8px
+
+  @media mq-tablet
+    margin-top: 4px
 
 #main-nav
   float: left
