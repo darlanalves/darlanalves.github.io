@@ -268,9 +268,9 @@ app.factory('FooService', function($q, $http) {
 
 # Bônus
 
-- Fiz um Plunker com algumas variações da API de Promises para exemplificar as opções fornecidas pelo AngularJS.
+- Fiz [um Plunker com algumas variações](http://embed.plnkr.co/bQlNjX/preview) da API de Promises para exemplificar as opções fornecidas pelo AngularJS.
 
-- E outro Plunker demonstrando o tratamento de erros dentro do Service.
+- E [outro Plunker](http://embed.plnkr.co/JH3yzRj3eu3O9CboFQF0/preview) demonstrando o tratamento de erros dentro do Service.
 
 __ In promise we trust! __
 
