@@ -75,7 +75,7 @@ deploy:
 
 
 # Disqus
-disqus_shortname: darlan_alves
+disqus_shortname: darlanalves
 
 # excludes node stuff
 exclude: ['package.json', 'src', 'node_modules']
