@@ -14,7 +14,7 @@ Antes de ver a sintaxe, uma coisa é importante lembrar: o AngularJS não escrev
 Esse é formato mais comum. Simplesmente escreva uma expressão entre chaves duplas: {% raw %}“{{” e “}}“.{% endraw %}
 
 ```
-{% raw %}<div>{{ model.property }}</div>{% endraw %}
+<div>{{ model.property }}</div>
 ```
 
 A sintaxe de chaves não serve só para atualizar o conteúdo das tags; ela pode ser usada dentro de valores de atributos também:
@@ -46,7 +46,15 @@ Nesse formato, podemos usar mais de uma interpolação na mesma expressão. Quan
 Para esses casos, usamos o atributo, como no exemplo abaixo:
 
 ```
-<title ng-bind-template="{{page.title}} - {{site.name}}"></div>
+<html ng-app="my-app">
+<head>
+	<title ng-bind-template="{{page.title}} - {{site.name}}"></title>
+	<!-- ...  -->
+</head>
+<body>
+	<!-- ...  -->
+</body>
+</html>
 ```
 
 
