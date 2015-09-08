@@ -23,4 +23,14 @@
 
 <%- js('js/script') %>
 <script src="https://cdn.rawgit.com/darlanalves/uloader/master/dist/uloader.js"></script>
-<%- js('bootstrap') %>
+<script>$(function() {
+  var loader = new Uloader();
+
+  loader.load(['https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js']).then(function() {
+    $('[data-app]').each(function() {
+      var appName = $(this).attr('data-app') || 'ng';
+      angular.bootstrap(this, [appName]);
+    });
+  });
+});
+</script>
