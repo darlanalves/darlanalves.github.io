@@ -58,8 +58,8 @@ angular.factory('ResourceService', function($cacheFactory, $http) {
 });
 
 // ...
-// chamadas consecutivas a esse método com o mesmo ID vão usar os dados que estão no
-// cache em vez de buscar novamente no backend
+// chamadas consecutivas a esse método com o mesmo ID vão usar
+// os dados que estão no cache em vez de buscar novamente no backend
 ResourceService.getResource(123).then(/* ... */);
 ```
 
