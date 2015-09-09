@@ -78,3 +78,5 @@ deploy:
 
 # Disqus
 disqus_shortname: darlanalves
+
+skip_render: README.md

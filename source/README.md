@@ -1,4 +1,4 @@
-# http://darlanalv.es
+## http://darlanalv.es
 
 This is my personal website, which content related to web development, such as:
 
@@ -11,5 +11,3 @@ This is my personal website, which content related to web development, such as:
 ## Found a typo/error? Want to contribute?
 
 Just fork it and make changes in the `blog` branch, then open a pull request.
-
-
