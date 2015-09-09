@@ -1,10 +1,9 @@
-title: Uma forma organizada de usar o $stateProvider
+title: 'Uma forma organizada de usar o $stateProvider'
 lang: pt
-date: 2015-09-07 02:46:53
+date: 2015-09-08 21:40:26
 tags:
-- ui-router
 - states
-- router
+- route
 ---
 
 Configurar as rotas é uma coisa bem comum nos aplicativos web. Uma das bibliotecas mais usadas para esse propósito é a ui-router.
