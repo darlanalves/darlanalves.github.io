@@ -6,6 +6,8 @@ tags:
 O AngularJS vem com um serviço essencial nos apps SPA: $http. Ele fornece uma API para fazer requisições AJAX. Mas o
 que ele pode fazer além disso?
 
+<!-- more -->
+
 Nos casos mais simples, só executar uma requisição e pegar seu resultado já é suficiente. O serviço fornece alguns
 métodos para fazer as requisições HTTP mais comuns: .get(), .post(), .put(), .delete(), .head() e .patch(). Também
 há um método para requisições “JSON-with-padding”, o .jsonp(). Em todos os casos, o último parâmetro é um objeto

@@ -6,9 +6,9 @@ tags:
 ---
 
 Uma das coisas mais fantásticas do AngularJS é a “mágica” que ele faz entre o modelo e a view, atualizando os dados no
-DOM sempre que o modelo é alterado. Isso acontece através de uma técnica chamada dirty checking.
+DOM sempre que o modelo é alterado. Isso acontece através de uma técnica chamada dirty checking. Mas como isso funciona?
 
-Mas como isso funciona?
+<!-- more -->
 
 Dirty checking é um processo usado para verificar alterações em um valor, seja ele parte de um objeto ou o resultado
 de uma expressão. No AngularJS, funciona assim: o framework calcula e salva o valor de uma expressão e compara com o
