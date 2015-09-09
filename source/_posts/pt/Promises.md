@@ -5,6 +5,7 @@ tags:
 - promises
 ---
 Promise não é um conceito novo do AngularJS. Elas já existiam em libs como o jQuery antes do framework nascer. No entanto, entendê-las é essencial para desenvolver web apps.
+<!-- more -->
 
 Promise é exatamente o que este termo significa: uma promessa! Quando trabalhamos com requisições HTTP ou com callbacks, as coisas podem dar certo ou errado em um momento futuro que desconhecemos. Para exemplificar, vamos crirar uma história e pensar em um análogo do dia a dia: a previsão do tempo.
 
