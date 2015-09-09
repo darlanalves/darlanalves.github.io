@@ -1,4 +1,4 @@
-title: 'Module reveal pattern: o que é e com funciona no AngularJS'
+title: 'Module reveal pattern com AngularJS'
 lang: pt
 date: 2015-09-08 22:15:10
 tags:
