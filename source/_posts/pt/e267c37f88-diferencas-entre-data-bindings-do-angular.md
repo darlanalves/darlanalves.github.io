@@ -3,6 +3,7 @@ lang: pt
 date: 2015-09-07 02:43:30
 tags:
 - scope
+- api
 ---
 
 O framework fornece 3 formas distintas de criar um trecho de código dinâmico, que é atualizado automaticamente quando

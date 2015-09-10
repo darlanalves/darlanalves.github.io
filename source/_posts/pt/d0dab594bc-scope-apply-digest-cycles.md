@@ -3,6 +3,7 @@ lang: pt
 date: 2015-09-08 21:35:09
 tags:
 - scope
+- api
 ---
 
 Uma das coisas mais fantásticas do AngularJS é a “mágica” que ele faz entre o modelo e a view, atualizando os dados no

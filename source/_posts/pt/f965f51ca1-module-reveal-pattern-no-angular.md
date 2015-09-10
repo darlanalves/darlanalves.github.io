@@ -2,6 +2,7 @@ title: 'Module reveal pattern com AngularJS'
 lang: pt
 date: 2015-09-08 22:15:10
 tags:
+- patterns
 ---
 
 Ao escrever *services* no AngularJS, um pattern conhecido como "Module Reveal" é muito utilizado. Você talvez até tenha

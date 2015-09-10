@@ -3,6 +3,7 @@ lang: pt
 date: 2015-09-08 21:33:30
 tags:
 - scope
+- api
 ---
 Uma das coisas que todo front precisa entender sobre o AngularJS é o funcionamento dos escopos, pois eles são parte
 da “mágica” do two-way binding.

@@ -2,6 +2,7 @@ title: Usando $http no AngularJS
 lang: pt
 date: 2015-09-08 21:47:25
 tags:
+- api
 ---
 O AngularJS vem com um serviço essencial nos apps SPA: $http. Ele fornece uma API para fazer requisições AJAX. Mas o
 que ele pode fazer além disso?

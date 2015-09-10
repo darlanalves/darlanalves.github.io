@@ -3,6 +3,7 @@ lang: pt
 date: 2015-09-08 21:45:41
 tags:
 - promises
+- api
 ---
 Promise não é um conceito novo do AngularJS. Elas já existiam em libs como o jQuery antes do framework nascer.
 No entanto, entendê-las é essencial para desenvolver web apps.
