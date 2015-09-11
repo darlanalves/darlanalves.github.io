@@ -134,4 +134,21 @@
 
     $container.removeClass('mobile-nav-on');
   });
+
+  $('.article-featured-image').each(function () {
+    var el = $(this);
+    var image = el.find('img');
+    var color = el.attr('color');
+
+    if (image.length) {
+      var src = image.attr('src');
+      el.css('background-image', 'url(' + src + ')');
+      image.remove();
+    }
+
+    if (color) {
+      el.css('background-color', color);
+    }
+
+  });
 })(jQuery);

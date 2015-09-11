@@ -1,6 +1,7 @@
 title: Promises
 lang: pt
 date: 2015-09-08 21:45:41
+type: angular
 tags:
 - promises
 - api

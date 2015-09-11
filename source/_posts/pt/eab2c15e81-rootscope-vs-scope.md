@@ -1,6 +1,7 @@
 title: $rootScope vs $scope
 lang: pt
 date: 2015-09-08 21:33:30
+type: angular
 tags:
 - scope
 - api
