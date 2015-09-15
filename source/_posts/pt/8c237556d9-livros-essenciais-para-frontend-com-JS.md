@@ -2,7 +2,6 @@ title: Livros Essenciais para Front-End com JS
 lang: pt
 date: 2015-09-14 21:25:00
 icon: js
-featured: '2015/js-books'
 color: '#31332E'
 tags:
 ---
