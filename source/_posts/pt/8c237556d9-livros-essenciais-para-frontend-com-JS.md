@@ -1,4 +1,4 @@
-title: 8c237556d9-Livros Essenciais para Front-End com JS
+title: Livros Essenciais para Front-End com JS
 lang: pt
 date: 2015-09-14 21:25:00
 tags:
