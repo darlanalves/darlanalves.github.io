@@ -1,7 +1,8 @@
 title: 'Uma forma organizada de usar o $stateProvider'
 lang: pt
 date: 2015-09-08 21:40:26
-type: angular
+icon: angular
+featured: default
 tags:
 - states
 - route

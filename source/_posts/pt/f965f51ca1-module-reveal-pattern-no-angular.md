@@ -1,7 +1,8 @@
 title: 'Module reveal pattern com AngularJS'
 lang: pt
 date: 2015-09-08 22:15:10
-type: angular
+icon: angular
+featured: default
 tags:
 - patterns
 ---

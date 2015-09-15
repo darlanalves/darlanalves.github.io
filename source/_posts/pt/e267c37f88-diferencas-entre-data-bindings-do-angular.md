@@ -1,7 +1,8 @@
 title: Diferenças entre os data bindings do AngularJS
 lang: pt
 date: 2015-09-07 02:43:30
-type: angular
+icon: angular
+featured: default
 tags:
 - scope
 - api

@@ -1,7 +1,8 @@
 title: 'Escopos, $apply(), $digest e digest cycle'
 lang: pt
 date: 2015-09-08 21:35:09
-type: angular
+icon: angular
+featured: default
 tags:
 - scope
 - api

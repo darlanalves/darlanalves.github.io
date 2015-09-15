@@ -1,7 +1,8 @@
 title: Promises
 lang: pt
 date: 2015-09-08 21:45:41
-type: angular
+icon: angular
+featured: default
 tags:
 - promises
 - api

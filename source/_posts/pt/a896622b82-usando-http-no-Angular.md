@@ -1,7 +1,7 @@
 title: Usando $http no AngularJS
 lang: pt
 date: 2015-09-08 21:47:25
-type: angular
+icon: angular
 featured: default
 tags:
 - api
