@@ -4,6 +4,7 @@ date: 2015-09-14 21:25:00
 icon: js
 color: '#31332E'
 tags:
+- books
 ---
 
 Com a avalanche de bibliotecas, frameworks e técnicas que existem hoje no mercado, trabalhar com aplicações em Javascript se tornou bastante complexo em aplicações grandes. Lidar com toda a dinâmica de aplicações modernas requer profundo conhecimento e experiência dos detalhes técnicos envolvidos. Vários desenvolvedores já passaram por muitos desses problemas, e alguns escreveram os livros citados a seguir, explicando esses detalhes pra ajudar outros desenvolvedores.
