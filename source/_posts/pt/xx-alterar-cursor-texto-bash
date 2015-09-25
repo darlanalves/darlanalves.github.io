@@ -1,0 +1,15 @@
+parse_git_branch() {
+  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
+}
+
+get_directory_name() {
+    basename "$(pwd)"
+}
+
+if [ "$color_prompt" = yes ]; then
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[90;02m\] [\D{%a, %d %H:%I}] \[\033[01;32m\]\u\[\033[00m\] $(parse_git_branch) on \[\033[01;34m\]$(get_directory_name)\[\033[00m\] λ '
+else
+    PS1='${debian_chroot:+($debian_chroot)} [\D{%a, %d %H:%I}] \u@\h:\w λ '
+fi
+
+

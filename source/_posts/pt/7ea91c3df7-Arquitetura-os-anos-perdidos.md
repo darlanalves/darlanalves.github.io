@@ -7,7 +7,7 @@ tags:
 - architecture
 ---
 
-Um dos assuntos que eu mais gosto de estudar ou conversar é arquitetura. Sem dúvidas, é a parte mais importante em qualquer sistema. E ninguém melhor pra falar de arquitetura do que o uma das maiores autoridades da metodologia ágil do mundo: o Tio Bob!
+Um dos assuntos que eu mais gosto de estudar ou conversar é arquitetura. Sem dúvidas, é a parte mais importante em qualquer sistema. E ninguém melhor pra falar de arquitetura do que uma das maiores referências da metodologia ágil do mundo: o Tio Bob!
 
 <!-- more -->
 
