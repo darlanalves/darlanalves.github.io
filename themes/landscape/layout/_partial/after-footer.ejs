@@ -25,12 +25,21 @@
 <script src="https://cdn.rawgit.com/darlanalves/uloader/master/dist/uloader.js"></script>
 <script>$(function() {
   var loader = new Uloader();
+  var files = ['https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js'];
 
-  loader.load(['https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js']).then(function() {
+  $('script[data-src], style[data-src]').each(function() {
+    var src = $(this).attr('data-src') || '';
+
+    if (src) { files.push(src); }
+  });
+
+  loader.load(files).then(function() {
     $('[data-app]').each(function() {
       var appName = $(this).attr('data-app') || 'ng';
       angular.bootstrap(this, [appName]);
     });
+  }).catch(function(error) {
+    console.log('Failed to run demos:', error);
   });
 });
 </script>

@@ -79,4 +79,6 @@ deploy:
 # Disqus
 disqus_shortname: darlanalves
 
-skip_render: README.md
+skip_render:
+- README.md
+- post_files/**/*.*
