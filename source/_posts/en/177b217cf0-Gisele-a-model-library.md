@@ -75,23 +75,19 @@ Here's an example of how I define a new field type called `Point`. This snippet 
 ```
 // Constructor
 class Point {
-    constructor(pair) {
-        this.x = pair.x || 0;
-        this.y = pair.y || 0;
+    constructor(pair = [0, 0]) {
+        [this.x, this.y] = pair;
     }
 }
 
 // Field definition
 class PointField extends Gisele.Field {
     parseValue(value) {
-        return value ? new Point(value) : null;
+        return Array.isArray(value) ? new Point(value) : null;
     }
 
     toJSON(value) {
-        return {
-            x: value.x,
-            y: value.y
-        };
+        return [value.x, value.y];
     }
 }
 
@@ -127,8 +123,8 @@ var Rectangle = Gisele.Model.create({
 });
 
 var rect = new Rectangle({
-    topLeft:        { x: 10, y: 10 },
-    bottomRight:    { x: 15, y: 15 }
+    topLeft: [10, 10],
+    bottomRight: [15, 15]
 });
 
 console.log(rect.area())
