@@ -6,7 +6,7 @@ tags:
 - es6
 ---
 
-Today I'll show a little library (~6kb) written in 2 days with ES6 + Babel. I called it Gisele, a super model.
+Today I'll show a little library (~6kb) written in 2 days with ES6 + Babel. I called it [Gisele](https://github.com/darlanalves/gisele), like the super model.
 
 <!-- more -->
 
