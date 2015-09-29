@@ -82,11 +82,11 @@ class Point {
 
 // Field definition
 class PointField extends Gisele.Field {
-    parseValue(value) {
+    parse(value) {
         return Array.isArray(value) ? new Point(value) : null;
     }
 
-    toJSON(value) {
+    serialize(value) {
         return [value.x, value.y];
     }
 }
@@ -132,13 +132,13 @@ console.log(rect.area())
 
 ```
 
-As you can see, the field declaration is a combination of a Constructor function and a Field subclass.
+As you can see, the field declaration is a combination of a Constructor function and a Field subclass, and the field has a mechanism to parse/serialize values. This also works as a validator to each field.
 
 ### Extending the model methods
 
 The base class to all the models has a property that points to a prototype shared with every instance of our models. I'm talking about `Model.fn`, an object with some methods already defined on it.
 
-When a new model instance is created, it receives a property named `$$`, which gives access to model`s inner methods. They are not part of our model`s prototype to avoid conflicts with property names.
+When a new model instance is created, it receives a property named `$$`, which gives access to model's inner methods. They are not part of our model's prototype to avoid conflicts with property names.
 
 Let's override the default `commit` method with a new function:
 
