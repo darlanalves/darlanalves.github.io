@@ -1,0 +1,14 @@
+{
+	"folders":
+	[
+		{
+			"folder_exclude_patterns":
+			[
+				".deploy_git",
+				"node_modules",
+				"public"
+			],
+			"path": "."
+		}
+	]
+}

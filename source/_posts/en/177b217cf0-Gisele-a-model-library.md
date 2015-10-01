@@ -6,14 +6,19 @@ tags:
 - es6
 ---
 
-Today I'll show a little library (~6kb) written in 2 days with ES6 + Babel. I called it [Gisele](https://github.com/darlanalves/gisele), like the super model.
+Today I'll show a little library (~6kb) written with ES6 + Babel. It's called [Gisele](https://github.com/darlanalves/gisele), like the super model.
 
 <!-- more -->
 
-## So what this library does?
+## What it does?
 
-It is a wrapper to JS objects, plus a little type system, based on Constructors.
-It works like this: you will give a set of fields to a factory and it will return a function that you use to instantiate models.
+Gisele is tiny wrapper around JS plain objects combined with a little type validation system.
+
+Starting with a simple use case, we are going to write a wrapper for a `User` entity, which has four fields: `id`, `name`, `email` and `active`. Both name and email are strings, id is a read-only number and active is a boolean.
+
+The syntax is quite simple. Each fields has a type, and for the most common data types, we use the built-in constructors already present in the Javascript language.
+
+This is what a User model looks like:
 
 ```
 var User = Gisele.Model.create({
@@ -24,8 +29,7 @@ var User = Gisele.Model.create({
 });
 ```
 
-In the snippet above I have a new `model` called *User*. It can be used to build user instances.
- But what it does that could not be done with a POJO?
+From now on, we can make instances of our User structure with actual user data:
 
 ```
 var bob = new User({
@@ -35,13 +39,13 @@ var bob = new User({
 });
 ```
 
-Bob is now an instance of User. So far, nothing really surprising. But there's a trick I used from ES5 that allows to define getters and setters for any object property.
+Bob is now an instance of User, an object with nothing unusual. But there's a trick I used from ES5 that allows to define getters and setters for any object property.
+
+That's where the wrapper comes in: we can change the value of our model attributes, but they are actually written to an internal state object. Only when we call a method that this changes are actually applied over the initial data.
 
 ## How it works
 
-The fields you give to the `Model.create()` factory are transformed into a custom property on each model instance. When you instantiate a model, a getter/setter pair of functions is defined for each field, to read values from an internal state object, not the instance itself. Whenever a field is changed, the setter function is called to write in the same internal object.
-
-This is done [with `Object.defineProperty` method](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty).
+The fields you give to `Model.create()` are transformed into a custom property on each model instance. When you instantiate a model, a getter/setter pair of functions is defined for each field to handle changes. Whenever a field is changed, the setter function is called to save this in a special property. This is done [with `Object.defineProperty` method](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty).
 
 The field values are stored apart from the instance, so the model state can be changed or restored through instance methods. This enables an easier tracking of changes to be saved. For example, a model instance can be attached to fields in a form. This works perfectly with frameworks like [AngularJS](https://angular.io/). The model exposes a property `$$dirty` that flags a changed model.
 
@@ -95,11 +99,24 @@ class PointField extends Gisele.Field {
 Gisele.Field.register.add(Point, PointField);
 ```
 
-From now on, we can declare a model using this type. There is one rule to follow here: the constructor must have only one argument. Since we are dealing with model fields, which represent a single value on a model, we can't declare a constructor that deals with more than one data unit.
+From now on, we can declare a model using this type. There is one rule to follow here: the constructor must have only one argument. Since we are dealing with model fields, which represent a single value on a model, we can't declare a constructor that deals with more than one thing.
 
-We can also define some methods to our new model. Let's try it:
+We can also define some methods to our new model and use arrays of values in a field:
 
 ```
+var Polygon = Gisele.Model.create({
+    vertices: { type: Point, isArray: true }
+});
+
+var somePolygon = new Polygon({
+    vertices: [
+        [10, 10],
+        [10, 20],
+        [15, 10],
+        [15, 20]
+    ]
+});
+
 var Rectangle = Gisele.Model.create({
     fields: {
         topLeft: Point,
@@ -153,6 +170,10 @@ Gisele.Model.fn.commit = function() {
 ```
 
 Now everytime the model changes are applied, the changes are printed to the console. More methods can be added to this property as well. From a model custom method, the `commit` here can be accessed as `this.$$.commit`, as you can see in the Rectangle example above.
+
+The library is available on GitHub:
+
+[http://github.com/darlanalves/gisele](http://github.com/darlanalves/gisele)
 
 ### Demos
 
