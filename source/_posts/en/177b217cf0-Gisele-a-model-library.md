@@ -180,6 +180,7 @@ The library is available on GitHub:
 Here's the examples above running:
 
 {% raw %}
+
 <div data-app="test" ng-controller="TestCtrl">
     <p>Hello <b>{{user.name}}</b>!</p>
     <form ng-submit="user.$$.commit()" class="form">
