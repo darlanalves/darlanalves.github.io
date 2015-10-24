@@ -14,3 +14,7 @@ Um dos assuntos que eu mais gosto de estudar ou conversar é arquitetura. Sem d�
 Essa palestra é de 2011 em uma conferência de Ruby, e vale muito a pena assistir. E assistir novamente de vez em quando.
 
 {% youtube WpkDN78P884 %}
+
+Também encontrei uma versão mais recente da mesma talk, com mais alguns _insights_ interessantes:
+
+{% youtube HhNIttd87xs %}

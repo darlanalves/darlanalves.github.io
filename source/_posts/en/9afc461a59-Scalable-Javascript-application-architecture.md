@@ -1,8 +1,8 @@
 title: 'Scalable Javascript application architecture'
-icon: youtube
-color: '#ff3333'
 lang: en
 date: 2015-10-22 14:25:38
+icon: youtube
+color: '#ff3333'
 tags:
 - architecture
 ---
