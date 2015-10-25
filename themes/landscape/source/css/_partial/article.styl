@@ -25,15 +25,14 @@
   @extend $block
   overflow: hidden
 
-.article-featured-image
+.article-title-box
+    box-sizing: border-box
     width: 100%
-    height: 120px
-    background-color: #eddb4f
-    background-size: cover
-    background-position: center top
+    min-height: 60px
+    padding: 20px
 
     @media mq-mobile
-      height: 60px
+      min-height: 0
 
     img
       display: none
@@ -58,18 +57,18 @@
   @extend $block-caption
   margin: 0 12px 1em
 
-.article-header
-  padding: article-padding article-padding 0
-
 .article-title
   text-decoration: none
-  font-size: 2em
-  font-weight: bold
-  color: color-default
+  font-size: 1.8em
+  color: inherit
   line-height: line-height-title
   transition: color 0.2s
+
   a&:hover
-    color: color-link
+    color: inherit
+
+  @media mq-mobile
+    font-size: 1.3em
 
 .article-entry
   @extend $base-style

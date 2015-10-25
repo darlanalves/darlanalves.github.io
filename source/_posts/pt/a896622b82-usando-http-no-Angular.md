@@ -1,8 +1,7 @@
 title: Usando $http no AngularJS
 lang: pt
 date: 2015-09-08 21:47:25
-icon: angular
-color: '#97362c'
+type: angular
 tags:
 - api
 ---

@@ -1,7 +1,7 @@
 title: IPFS and a decentralized web
 lang: en
 date: 2015-09-10 18:26:03
-icon: random
+type: random
 featured: default
 tags:
 - random

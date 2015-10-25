@@ -1,8 +1,7 @@
 title: 'Arquitetura: os anos perdidos'
 lang: pt
 date: 2015-09-14 22:48:25
-icon: youtube
-color: '#ff3333'
+type: youtube
 tags:
 - architecture
 ---

@@ -1,15 +1,16 @@
 title: Livros Essenciais para Front-End com JS
 lang: pt
 date: 2015-09-14 21:25:00
-icon: js
-color: '#31332E'
+type: random
 tags:
 - books
 ---
 
-Com a avalanche de bibliotecas, frameworks e técnicas que existem hoje no mercado, trabalhar com aplicações em Javascript se tornou bastante complexo em aplicações grandes. Lidar com toda a dinâmica de aplicações modernas requer profundo conhecimento e experiência dos detalhes técnicos envolvidos. Vários desenvolvedores já passaram por muitos desses problemas, e alguns escreveram os livros citados a seguir, explicando esses detalhes pra ajudar outros desenvolvedores.
+Com a avalanche de bibliotecas, frameworks e técnicas que existem hoje no mercado, trabalhar com aplicações em Javascript se tornou bastante complexo em aplicações grandes. Lidar com toda a dinâmica de aplicações modernas requer profundo conhecimento e experiência dos detalhes técnicos envolvidos.
 
 <!-- more -->
+
+Vários desenvolvedores já passaram por muitos desses problemas, e alguns escreveram os livros citados a seguir, explicando esses detalhes pra ajudar outros desenvolvedores.
 
 ## Clean Code (Robert Martin)
 
@@ -25,7 +26,7 @@ Livro muito importante pra qualquer um que trabalhe com Javascript. O autor cita
 
 ## Eloquent Javascript (Marijn Haverbeke)
 
-Um guia bem didático pra quem não conhece Javascript e até pra quem já trabalha há um bom tempo na área. Faz uma introdução a todos os detalhes da linguagem, como estruturas de dados, tratamento de erros, módulos, etc.
+Um guia bem didático pra quem não conhece Javascript e até pra quem já trabalha há um bom tempo na área. Traz uma introdução a todos os detalhes da linguagem, como estruturas de dados, tratamento de erros, módulos, etc.
 
 ## Speaking Javascript (Dr. Axel Rauschmayer)
 

@@ -1,5 +1,5 @@
 title: Gisele - a model library
-icon: js
+type: js
 lang: en
 date: 2015-09-28 00:12:26
 tags:

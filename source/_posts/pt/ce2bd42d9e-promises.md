@@ -1,8 +1,7 @@
 title: Promises
 lang: pt
 date: 2015-09-08 21:45:41
-icon: angular
-color: '#97362c'
+type: angular
 tags:
 - promises
 - api

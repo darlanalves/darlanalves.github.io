@@ -1,8 +1,7 @@
 title: Diferenças entre os data bindings do AngularJS
 lang: pt
 date: 2015-09-07 02:43:30
-icon: angular
-color: '#97362c'
+type: angular
 tags:
 - scope
 - api
