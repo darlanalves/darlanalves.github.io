@@ -1,6 +1,5 @@
-title: {{ title }}
+title: '{{ title }}'
 date: {{ date }}
-color: '#97362c'
-icon: angular
+type: js
 tags:
 ---
