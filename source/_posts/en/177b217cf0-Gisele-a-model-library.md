@@ -201,7 +201,7 @@ Here's the examples above running:
     </form>
 </div>
 <script data-src="https://cdn.rawgit.com/darlanalves/gisele/v0.1.1/dist/gisele.js"></script>
-<script data-src="/post_files/177b217cf0-Gisele-a-model-library.js"></script>
+<script data-src="/post_files/177b217cf0/demo.js"></script>
 
 {% endraw %}
 
