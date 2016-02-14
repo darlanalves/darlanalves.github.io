@@ -14,7 +14,7 @@ You should start using them today! Let's see how!
 
 The idea of web components and custom HTML tags has been around for a while. Using them in our apps can lead to a better organization and a clear separation of concerns.
 
-In this article we will write a dead simple todo app using only components. Bear with me!
+In this article we will write a simple todo list using the new component syntax. Bear with me!
 
 ## So what's the deal?
 
@@ -30,10 +30,21 @@ Another small difference is the a binding signal, `<`, that means one-way bindin
 
 ## TL;DR
 
-- directives always have a controller
+- components always have a controller
 - $ctrl is the default alias
-- directives are elements only, no classes, attributes or comments!
+- components are directives of type `element` only. No more classes, attributes or comments!
 - `bindings` instead of `scope` to inject values from the outside world in the component
+
+When you should NOT use components:
+
+- If you need a directive that adds behaviour to a node, like `ng-click` does
+- If your directive needs to manipulate the DOM using `compile` and `link`
+- If you need control of the execution order through `priority` or `terminal`
+- If you need to process an attribute rather than an element
+
+## Using .component()
+
+The syntax is very similar to a directive, with one main difference: instead of writing an injectable function to declare the directive, use an object.
 
 Here's an example of a component:
 
@@ -49,6 +60,7 @@ var todoList = {
     }
 };
 
+// remember that the name todoList = <todo-list>
 angular.module('app').component('todoList', todoList);
 
 ```

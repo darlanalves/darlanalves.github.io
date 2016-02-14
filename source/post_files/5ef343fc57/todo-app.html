@@ -3,10 +3,7 @@
     <form ng-submit="app.addTask()" class="form">
         <h3>Add task</h3>
         <div class="form-group">
-            <label class="form-label">New Task:</label>
             <input type="text" ng-model="app.newTask" class="form-control" />
-        </div>
-        <div class="form-group">
             <button class="btn btn-primary" type="submit" ng-disabled="!app.newTask">Save</button>
         </div>
     </form>
