@@ -1,5 +1,5 @@
 title: 'Start using components in AngularJS today!'
-type: js
+type: angular
 lang: en
 date: 2016-02-13 14:48:07
 tags:
@@ -34,6 +34,7 @@ Another small difference is the a binding signal, `<`, that means one-way bindin
 - $ctrl is the default alias
 - components are directives of type `element` only. No more classes, attributes or comments!
 - `bindings` instead of `scope` to inject values from the outside world in the component
+- use the `$onInit` method on component class to initialize local bindings and component state, instead of doing that on constructor
 
 When you should NOT use components:
 
@@ -41,6 +42,20 @@ When you should NOT use components:
 - If your directive needs to manipulate the DOM using `compile` and `link`
 - If you need control of the execution order through `priority` or `terminal`
 - If you need to process an attribute rather than an element
+
+## Using "require" with a component
+
+Another important thing that **you should keep in mind** is that now the `require` option is used as a mapping between directive controllers and properties. For example, if you have to write a custom input element and you need to use `ngModel` along with your directive, here's how the `require` option will look like:
+
+```js
+require: {
+    model: 'ngModel'
+}
+```
+
+The config above is telling Angular to require the "ngModel" directive's controller and assign it to a property called "model" in our controller.
+
+A very important thing to remember is that the directives **may not be available** when the component's controller is instantiated, but is guaranteed that they are available on `$onInit` method.
 
 ## Using .component()
 
