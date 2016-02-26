@@ -1,4 +1,4 @@
-title: 'f3141b32ea-Start using npm3 today!'
+title: 'Start using npm3 today!'
 type: js
 lang: en
 date: 2016-02-26 12:44:27
