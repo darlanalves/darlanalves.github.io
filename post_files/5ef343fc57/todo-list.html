@@ -1,0 +1,9 @@
+<!-- todo-list.html -->
+<div class="todo-list">
+    <h3>To-do list</h3>
+    <ul>
+        <li ng-repeat="task in $ctrl.list" ng-click="$ctrl.onTaskClick({ task: task })" ng-class="task.done && 'done'">
+            {{task.title}}
+        </li>
+    </ul>
+</div>

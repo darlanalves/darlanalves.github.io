@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>Escopos, $apply(), $digest e digest cycle | Darlan Alves</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Uma das coisas mais fantásticas do AngularJS é a “mágica” que ele faz entre o modelo e a view, atualizando os dados noDOM sempre que o modelo é alterado. Isso acontece através de uma técnica chamada d">
+<meta name="keywords" content="api,scope">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Escopos, $apply(), $digest e digest cycle">
+<meta property="og:url" content="https://darlanalv.es/pt/other/d0dab594bc-scope-apply-digest-cycles/index.html">
+<meta property="og:site_name" content="Darlan Alves">
+<meta property="og:description" content="Uma das coisas mais fantásticas do AngularJS é a “mágica” que ele faz entre o modelo e a view, atualizando os dados noDOM sempre que o modelo é alterado. Isso acontece através de uma técnica chamada d">
+<meta property="og:locale" content="pt">
+<meta property="og:image" content="https://darlanalv.es/covers/cover-fb.png">
+<meta property="og:updated_time" content="2019-07-24T11:25:13.400Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Escopos, $apply(), $digest e digest cycle">
+<meta name="twitter:description" content="Uma das coisas mais fantásticas do AngularJS é a “mágica” que ele faz entre o modelo e a view, atualizando os dados noDOM sempre que o modelo é alterado. Isso acontece através de uma técnica chamada d">
+<meta name="twitter:image" content="https://darlanalv.es/covers/cover-fb.png">
+<meta name="twitter:creator" content="@angularjsdev">
+  
+    <link rel="alternative" href="/atom.xml" title="Darlan Alves" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-42218141-2', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <style data-src="/post_files/forms.css"></style>
+</head></html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Darlan Alves</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">On software craftsmanship and other stuff</a>
+        </h2>
+      
+    </div>
+    <div id="header-avatar"></div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://darlanalv.es"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-d0dab594bc-scope-apply-digest-cycles" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-icon"><img src="/icons/angular.png" /></div>
+
+  <div class="article-meta">
+    <a href="/pt/other/d0dab594bc-scope-apply-digest-cycles/index.html" class="article-date">
+  <time datetime="2015-09-08T19:35:09.000Z" itemprop="datePublished">2015-09-08</time>
+</a>
+    
+  </div>
+
+  <div class="article-inner">
+    <div class="article-title-box type-angular">
+      
+        <header class="article-header">
+          
+  
+    <h1 class="article-title" itemprop="name">
+      Escopos, $apply(), $digest e digest cycle
+    </h1>
+  
+
+        </header>
+      
+    </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Uma das coisas mais fant&#xE1;sticas do AngularJS &#xE9; a &#x201C;m&#xE1;gica&#x201D; que ele faz entre o modelo e a view, atualizando os dados no<br>DOM sempre que o modelo &#xE9; alterado. Isso acontece atrav&#xE9;s de uma t&#xE9;cnica chamada dirty checking. Mas como isso funciona?</p>
+<a id="more"></a>
+<p>Dirty checking &#xE9; um processo usado para verificar altera&#xE7;&#xF5;es em um valor, seja ele parte de um objeto ou o resultado<br>de uma express&#xE3;o. No AngularJS, funciona assim: o framework calcula e salva o valor de uma express&#xE3;o e compara com o<br>valor salvo anteriormente. Se os valores forem diferentes, ele marca essa express&#xE3;o como &#x201C;dirty&#x201D;, ou suja.<br>Esse processo acontece em todos escopos ligados &#xE0; p&#xE1;gina atual, partindo da raiz da aplica&#xE7;&#xE3;o, ou seja, o $rootScope.<br>Ao final do processo, se alguma express&#xE3;o dirty for encontrada, o ciclo &#xE9; reiniciado, at&#xE9; que todas as express&#xF5;es n&#xE3;o<br>tenham mais modifica&#xE7;&#xF5;es.</p>
+<p>Esse processo continua at&#xE9; que todos os valores estabilizem, o que pode facilmente gerar um loop infinito. Para que<br>isso n&#xE3;o aconte&#xE7;a, dois cuidados foram tomados, que vamos conferir a seguir:</p>
+<h3 id="1-limite-de-ciclos-executados"><a href="#1-limite-de-ciclos-executados" class="headerlink" title="1. limite de ciclos executados"></a>1. limite de ciclos executados</h3><p>Para evitar um loop infinito, o framework limita o n&#xFA;mero de ciclos a 10 itera&#xE7;&#xF5;es. Ap&#xF3;s isso o framework vai<br>lan&#xE7;ar uma exce&#xE7;&#xE3;o como essa:</p>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">10</span> $digest() <span class="built_in">iterations</span> reached. Aborting!</span><br><span class="line">Watchers fired <span class="keyword">in</span> the <span class="built_in">last</span> <span class="number">5</span> <span class="built_in">iterations</span>: ...</span><br></pre></td></tr></table></figure>
+<p>Este valor pode ser alterado se necess&#xE1;rio, mas precisa de uma boa justificativa.</p>
+<h3 id="2-apply-ou-digest-n&#xE3;o-podem-ser-executados-durante-um-ciclo"><a href="#2-apply-ou-digest-nao-podem-ser-executados-durante-um-ciclo" class="headerlink" title="2. $apply ou $digest n&#xE3;o podem ser executados durante um ciclo"></a>2. $apply ou $digest n&#xE3;o podem ser executados durante um ciclo</h3><p>Os m&#xE9;todos de escopo que invocam um ciclo de verifica&#xE7;&#xF5;es n&#xE3;o podem ser chamados se um ciclo j&#xE1; est&#xE1; em execu&#xE7;&#xE3;o.</p>
+<p>Mas o que &#xE9; exatamente <code>$apply()</code>?</p>
+<p>Todas as coisas que acontecem dentro do &#x201C;mundo do AngularJS&#x201D; invocam esse m&#xE9;todo depois de executadas, sejam elas um<br>event handler (como o ng-click) ou servi&#xE7;os do framework (como $http ou $timeout). Isso significa que: toda a&#xE7;&#xE3;o que<br>o usu&#xE1;rio ou algum servi&#xE7;o executar vai iniciar um novo digest cycle, caminhando por todos os escopos e verificando<br>altera&#xE7;&#xF5;es. Logo, tudo que acontece atrav&#xE9;s do framework j&#xE1; atualiza a view de forma autom&#xE1;tica.</p>
+<p>No entanto, em alguns casos, n&#xF3;s executamos coisas que o AngularJS n&#xE3;o sabe. Somente nesses casos &#xE9; que usamos<br>$scope.$apply(), para avisar o framework que alguma coisa mudou. Um exemplo disso &#xE9; uma integra&#xE7;&#xE3;o de plugins jQuery<br>com o sistema de diretivas do AngularJS. O plugin n&#xE3;o tem conhecimento do framework, e vice-versa. Sempre que<br>alguma coisa muda no plugin, n&#xF3;s precisamos notificar o Angular desta altera&#xE7;&#xE3;o.</p>
+<h2 id="recapitulando"><a href="#Recapitulando" class="headerlink" title="Recapitulando"></a>Recapitulando</h2><p>Tudo que acontece no modelo passa por uma verifica&#xE7;&#xE3;o de modifica&#xE7;&#xF5;es, ou dirty checking, que atualiza a view se<br>necess&#xE1;rio. Em alguns casos, precisamos iniciar um ciclo manualmente, atrav&#xE9;s do m&#xE9;todo $apply().</p>
+<h2 id="quando-usar-digest"><a href="#Quando-usar-digest" class="headerlink" title="Quando usar $digest"></a>Quando usar $digest</h2><p>Este m&#xE9;todo tem a mesma fun&#xE7;&#xE3;o que $apply, com uma diferen&#xE7;a importante: ele parte do escopo em que foi chamado,<br>n&#xE3;o da raiz do aplicativo. Isso &#xE9; mais eficiente, j&#xE1; que a verifica&#xE7;&#xE3;o vai ser feita em menos objetos.<br>Este detalhe pode ser bem &#xFA;til para realizar otimiza&#xE7;&#xF5;es no aplicativo.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://darlanalv.es/pt/other/d0dab594bc-scope-apply-digest-cycles/index.html" data-id="cjyh72g3d000ipjidmmp86mfo" class="article-share-link">Share</a>
+      
+        <a href="https://darlanalv.es/pt/other/d0dab594bc-scope-apply-digest-cycles/index.html#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/api/">api</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/scope/">scope</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/pt/other/41c05887ea-organizando-rotas-stateProvider/index.html" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Uma forma organizada de usar o $stateProvider
+        
+      </div>
+    </a>
+  
+  
+    <a href="/pt/other/eab2c15e81-rootscope-vs-scope/index.html" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">$rootScope vs $scope</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<section id="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/api/">api</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/architecture/">architecture</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/books/">books</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/components/">components</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/es5/">es5</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/es6/">es6</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/experiments/">experiments</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/npm/">npm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/patterns/">patterns</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/promises/">promises</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/random/">random</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/route/">route</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scope/">scope</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/states/">states</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tools/">tools</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/angular/" style="font-size: 10px;">angular</a> <a href="/tags/api/" style="font-size: 20px;">api</a> <a href="/tags/architecture/" style="font-size: 13.33px;">architecture</a> <a href="/tags/books/" style="font-size: 10px;">books</a> <a href="/tags/components/" style="font-size: 10px;">components</a> <a href="/tags/es5/" style="font-size: 10px;">es5</a> <a href="/tags/es6/" style="font-size: 10px;">es6</a> <a href="/tags/experiments/" style="font-size: 10px;">experiments</a> <a href="/tags/npm/" style="font-size: 10px;">npm</a> <a href="/tags/patterns/" style="font-size: 10px;">patterns</a> <a href="/tags/promises/" style="font-size: 10px;">promises</a> <a href="/tags/random/" style="font-size: 10px;">random</a> <a href="/tags/route/" style="font-size: 10px;">route</a> <a href="/tags/scope/" style="font-size: 16.67px;">scope</a> <a href="/tags/states/" style="font-size: 10px;">states</a> <a href="/tags/tools/" style="font-size: 10px;">tools</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">11</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/en/other/58184a8ee2-exporting-Node-JS-modules-in-babel-6-x/index.html">Exporting Node.JS modules in Babel 6.x</a>
+          </li>
+        
+          <li>
+            <a href="/en/other/f3141b32ea-Start-using-npm3-today/index.html">Start using npm3 today!</a>
+          </li>
+        
+          <li>
+            <a href="/en/other/5ef343fc57-start-using-components-today/index.html">Start using components in AngularJS today!</a>
+          </li>
+        
+          <li>
+            <a href="/en/other/598ccc3f91-Using-ES5-getters-setters-with-prototype/index.html">Using ES5 getters/setters with prototype</a>
+          </li>
+        
+          <li>
+            <a href="/en/other/9afc461a59-Scalable-Javascript-application-architecture/index.html">Scalable Javascript application architecture</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    <div class="widget-wrap contact-widget">
+  <h3 class="widget-title">Contact</h3>
+  <div class="widget">
+    
+    <a class="icon icon-tw" target="_blank" href="http://twitter.com/angularjsdev" title="Twitter"></a>
+    
+
+    
+    <a class="icon icon-fb" target="_blank" href="http://fb.com/darlanalv.es" title="Facebook"></a>
+    
+
+    
+    <a class="icon icon-gh" target="_blank" href="http://github.com/darlanalves" title="GitHub"></a>
+    
+
+    
+    <a class="icon icon-email" href="mailto:me@darlanalv.es" title="E-mail"></a>
+    
+
+    
+    <a class="icon icon-resume" href="https://darlanalv.es/resume.pdf" title="Resume"></a>
+    
+  </div>
+</div>
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Darlan Alves<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.<br>
+      <small>Header image from <a href="http://linux-shines.deviantart.com/art/Tree-and-Stars-original-with-original-resolution-446470036">deviantart</a></small>
+    </div>
+  </div>
+
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'darlanalves';
+  
+  var disqus_url = 'https://darlanalv.es/pt/other/d0dab594bc-scope-apply-digest-cycles/index.html';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="https://cdn.rawgit.com/darlanalves/uloader/master/dist/uloader.js"></script>
+<script>$(function() {
+  var loader = new Uloader();
+  var files = ['https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js'];
+
+  $('script[data-src], style[data-src]').each(function() {
+    var src = $(this).attr('data-src') || '';
+
+    if (src) { files.push(src); }
+  });
+
+  loader.load(files).then(function() {
+    $('[data-app]').each(function() {
+      var appName = $(this).attr('data-app') || 'ng';
+      angular.bootstrap(this, [appName]);
+    });
+  }).catch(function(error) {
+    console.log('Failed to run demos:', error);
+  });
+});
+</script>
+  </div>
+</body>
+</html>

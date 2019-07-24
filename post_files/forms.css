@@ -1,0 +1,53 @@
+.form-group {
+    padding: 7px 0;
+    margin-top: 7px;
+}
+
+.form-control,
+.btn {
+    padding: 7px 14px;
+    border-radius: 3px;
+    border: 1px solid transparent;
+    font-size: 14px;
+    outline: 0;
+}
+
+.form-control:disabled,
+.btn:disabled {
+    background: #eee;
+    color: #999;
+    border-color: #777;
+    text-shadow: 1px 1px 0 white;
+}
+
+.form-label {
+    padding: 7px 0;
+    display: block;
+    font-size: 14px;
+}
+
+.btn {
+    color: white;
+}
+
+.btn-default {
+    background: #bbb;
+    border-color: #999;
+}
+
+.btn-primary {
+    background: rgb(109, 159, 67);
+    border-color: #618d3b;
+}
+
+.form-control {
+    border: 1px solid #eee;
+}
+
+.form-control:focus {
+    background: #fffedd;
+}
+
+.btn:focus {
+    outline: 1px dotted #333;
+}

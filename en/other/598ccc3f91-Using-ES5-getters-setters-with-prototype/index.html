@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>Using ES5 getters/setters with prototype | Darlan Alves</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Today I will show you how to use functions to read/write a property of an object using Object.defineProperty and how to inherit the getters/setters in the prototype">
+<meta name="keywords" content="es5,experiments">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Using ES5 getters&#x2F;setters with prototype">
+<meta property="og:url" content="https://darlanalv.es/en/other/598ccc3f91-Using-ES5-getters-setters-with-prototype/index.html">
+<meta property="og:site_name" content="Darlan Alves">
+<meta property="og:description" content="Today I will show you how to use functions to read/write a property of an object using Object.defineProperty and how to inherit the getters/setters in the prototype">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://darlanalv.es/covers/cover-fb.png">
+<meta property="og:updated_time" content="2019-07-24T11:25:13.399Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Using ES5 getters&#x2F;setters with prototype">
+<meta name="twitter:description" content="Today I will show you how to use functions to read/write a property of an object using Object.defineProperty and how to inherit the getters/setters in the prototype">
+<meta name="twitter:image" content="https://darlanalv.es/covers/cover-fb.png">
+<meta name="twitter:creator" content="@angularjsdev">
+  
+    <link rel="alternative" href="/atom.xml" title="Darlan Alves" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-42218141-2', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <style data-src="/post_files/forms.css"></style>
+</head></html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Darlan Alves</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">On software craftsmanship and other stuff</a>
+        </h2>
+      
+    </div>
+    <div id="header-avatar"></div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://darlanalv.es"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-598ccc3f91-Using-ES5-getters-setters-with-prototype" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-icon"><img src="/icons/js.png" /></div>
+
+  <div class="article-meta">
+    <a href="/en/other/598ccc3f91-Using-ES5-getters-setters-with-prototype/index.html" class="article-date">
+  <time datetime="2015-11-21T00:55:00.000Z" itemprop="datePublished">2015-11-21</time>
+</a>
+    
+  </div>
+
+  <div class="article-inner">
+    <div class="article-title-box type-js">
+      
+        <header class="article-header">
+          
+  
+    <h1 class="article-title" itemprop="name">
+      Using ES5 getters/setters with prototype
+    </h1>
+  
+
+        </header>
+      
+    </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Today I will show you how to use functions to read/write a property of an object using <code>Object.defineProperty</code> and how to inherit the getters/setters in the prototype</p>
+<a id="more"></a>
+<p>First of all, if you don&#x2019;t know the <code>Object.defineProperty</code> method, let&#x2019;s do a quick recap:</p>
+<blockquote>
+<p>The Object.defineProperty() method defines a new property directly on an object, or modifies an existing property on an object, and returns the object. &#x2013; <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty" target="_blank" rel="noopener">From MDN</a> &#x2013;</p>
+</blockquote>
+<p>You can define a property of an object and configure its behaviour, like the visibility of this property in the object or whether the property can or cannot be written.</p>
+<p>Today I will use two handful configurations here: <code>get</code> and <code>set</code>. Both are functions that will be called when we read and write to a property. In other words, they are the well known getters and setters of a property.</p>
+<h2 id="customize-a-property"><a href="#Customize-a-property" class="headerlink" title="Customize a property"></a>Customize a property</h2><p>Now we can define a property in any object with a pair of functions to read/write it:</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> object = {};</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> config = {</span><br><span class="line">	<span class="keyword">get</span>: <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{ <span class="keyword">return</span> <span class="keyword">this</span>.__foo; },</span><br><span class="line">	<span class="keyword">set</span>: <span class="function"><span class="keyword">function</span><span class="params">(value)</span> </span>{ <span class="keyword">this</span>.__foo = value; }</span><br><span class="line">};</span><br><span class="line"></span><br><span class="line">Object.defineProperty(object, <span class="string">&apos;foo&apos;</span>, config);</span><br></pre></td></tr></table></figure>
+<p>Our <code>object</code> above will write to <code>__foo</code> when we execute a statement like this: <code>object.foo = 1;</code>. And, as expected, the same property will be used to read the value of <code>foo</code> if we read from <code>object.foo</code>.</p>
+<h2 id="using-as-a-prototype"><a href="#Using-as-a-prototype" class="headerlink" title="Using as a prototype"></a>Using as a prototype</h2><p>Now is the interesting part: we could use <code>object</code> as a prototype of a constructor, and new objects created from this prototype will also inherit the custom property!</p>
+<p>Let&#x2019;s modify the example above:</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Test</span><span class="params">()</span> </span>{</span><br><span class="line">	<span class="keyword">this</span>.values = {};</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> prototype = {</span><br><span class="line">	constructor: Test</span><br><span class="line">};</span><br><span class="line"></span><br><span class="line">Test.prototype = prototype;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> fooConfig = {</span><br><span class="line">	<span class="keyword">get</span>: <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{ <span class="keyword">return</span> <span class="keyword">this</span>.values.foo; },</span><br><span class="line">	<span class="keyword">set</span>: <span class="function"><span class="keyword">function</span><span class="params">(value)</span> </span>{ <span class="keyword">this</span>.values.foo = value; }</span><br><span class="line">};</span><br><span class="line"></span><br><span class="line">Object.defineProperty(prototype, <span class="string">&apos;foo&apos;</span>, fooConfig);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> one = <span class="keyword">new</span> Test();</span><br><span class="line"></span><br><span class="line"><span class="comment">// assigning a value to foo will call the &apos;set&apos; function above</span></span><br><span class="line"><span class="comment">// which in turn will write to &apos;this.values&apos; instead</span></span><br><span class="line"></span><br><span class="line">one.foo = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">console.log(one.values);</span><br></pre></td></tr></table></figure>
+<p>The output expected in a console is this:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">{ <span class="attribute">foo</span>: <span class="number">1</span> }</span><br></pre></td></tr></table></figure>
+<h2 id="the-a-ha-moment"><a href="#The-a-ha-moment" class="headerlink" title="The a-ha moment"></a>The a-ha moment</h2><p>So, what&#x2019;s going on here?</p>
+<p>We defined a custom property in the <code>prototype</code> object, which as a getter and a setter for <code>foo</code>. When we read and write <code>foo</code>, we are actually writing to a different object in <code>this.values</code>. And when we used this <code>prototype</code> object as the base of our <code>Test</code> constructor, this configuration was also inherited in the new objects created with <code>new Test()</code>.</p>
+<p>This is specially useful if you want to control the read and write of properties in an object.</p>
+<p>Think about a model class! Now you can write a class that saves the modified properties in a different place, and you can detect if an object was modified or not.</p>
+<p>Cool, isn&#x2019;t it?</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://darlanalv.es/en/other/598ccc3f91-Using-ES5-getters-setters-with-prototype/index.html" data-id="cjyh72g330004pjidsvanzowq" class="article-share-link">Share</a>
+      
+        <a href="https://darlanalv.es/en/other/598ccc3f91-Using-ES5-getters-setters-with-prototype/index.html#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/es5/">es5</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/experiments/">experiments</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/en/other/5ef343fc57-start-using-components-today/index.html" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Start using components in AngularJS today!
+        
+      </div>
+    </a>
+  
+  
+    <a href="/en/other/9afc461a59-Scalable-Javascript-application-architecture/index.html" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Scalable Javascript application architecture</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<section id="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/api/">api</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/architecture/">architecture</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/books/">books</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/components/">components</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/es5/">es5</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/es6/">es6</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/experiments/">experiments</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/npm/">npm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/patterns/">patterns</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/promises/">promises</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/random/">random</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/route/">route</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scope/">scope</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/states/">states</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tools/">tools</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/angular/" style="font-size: 10px;">angular</a> <a href="/tags/api/" style="font-size: 20px;">api</a> <a href="/tags/architecture/" style="font-size: 13.33px;">architecture</a> <a href="/tags/books/" style="font-size: 10px;">books</a> <a href="/tags/components/" style="font-size: 10px;">components</a> <a href="/tags/es5/" style="font-size: 10px;">es5</a> <a href="/tags/es6/" style="font-size: 10px;">es6</a> <a href="/tags/experiments/" style="font-size: 10px;">experiments</a> <a href="/tags/npm/" style="font-size: 10px;">npm</a> <a href="/tags/patterns/" style="font-size: 10px;">patterns</a> <a href="/tags/promises/" style="font-size: 10px;">promises</a> <a href="/tags/random/" style="font-size: 10px;">random</a> <a href="/tags/route/" style="font-size: 10px;">route</a> <a href="/tags/scope/" style="font-size: 16.67px;">scope</a> <a href="/tags/states/" style="font-size: 10px;">states</a> <a href="/tags/tools/" style="font-size: 10px;">tools</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">11</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/en/other/58184a8ee2-exporting-Node-JS-modules-in-babel-6-x/index.html">Exporting Node.JS modules in Babel 6.x</a>
+          </li>
+        
+          <li>
+            <a href="/en/other/f3141b32ea-Start-using-npm3-today/index.html">Start using npm3 today!</a>
+          </li>
+        
+          <li>
+            <a href="/en/other/5ef343fc57-start-using-components-today/index.html">Start using components in AngularJS today!</a>
+          </li>
+        
+          <li>
+            <a href="/en/other/598ccc3f91-Using-ES5-getters-setters-with-prototype/index.html">Using ES5 getters/setters with prototype</a>
+          </li>
+        
+          <li>
+            <a href="/en/other/9afc461a59-Scalable-Javascript-application-architecture/index.html">Scalable Javascript application architecture</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    <div class="widget-wrap contact-widget">
+  <h3 class="widget-title">Contact</h3>
+  <div class="widget">
+    
+    <a class="icon icon-tw" target="_blank" href="http://twitter.com/angularjsdev" title="Twitter"></a>
+    
+
+    
+    <a class="icon icon-fb" target="_blank" href="http://fb.com/darlanalv.es" title="Facebook"></a>
+    
+
+    
+    <a class="icon icon-gh" target="_blank" href="http://github.com/darlanalves" title="GitHub"></a>
+    
+
+    
+    <a class="icon icon-email" href="mailto:me@darlanalv.es" title="E-mail"></a>
+    
+
+    
+    <a class="icon icon-resume" href="https://darlanalv.es/resume.pdf" title="Resume"></a>
+    
+  </div>
+</div>
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Darlan Alves<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.<br>
+      <small>Header image from <a href="http://linux-shines.deviantart.com/art/Tree-and-Stars-original-with-original-resolution-446470036">deviantart</a></small>
+    </div>
+  </div>
+
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'darlanalves';
+  
+  var disqus_url = 'https://darlanalv.es/en/other/598ccc3f91-Using-ES5-getters-setters-with-prototype/index.html';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="https://cdn.rawgit.com/darlanalves/uloader/master/dist/uloader.js"></script>
+<script>$(function() {
+  var loader = new Uloader();
+  var files = ['https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js'];
+
+  $('script[data-src], style[data-src]').each(function() {
+    var src = $(this).attr('data-src') || '';
+
+    if (src) { files.push(src); }
+  });
+
+  loader.load(files).then(function() {
+    $('[data-app]').each(function() {
+      var appName = $(this).attr('data-app') || 'ng';
+      angular.bootstrap(this, [appName]);
+    });
+  }).catch(function(error) {
+    console.log('Failed to run demos:', error);
+  });
+});
+</script>
+  </div>
+</body>
+</html>

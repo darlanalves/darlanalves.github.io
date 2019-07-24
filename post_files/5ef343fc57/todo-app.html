@@ -1,0 +1,10 @@
+<div class="app">
+    <todo-list list="app.list" on-task-click="app.markAsDone(task)"></todo-list>
+    <form ng-submit="app.addTask()" class="form">
+        <h3>Add task</h3>
+        <div class="form-group">
+            <input type="text" ng-model="app.newTask" class="form-control" />
+            <button class="btn btn-primary" type="submit" ng-disabled="!app.newTask">Save</button>
+        </div>
+    </form>
+</div>

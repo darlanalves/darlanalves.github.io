@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>$rootScope vs $scope | Darlan Alves</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Uma das coisas que todo front precisa entender sobre o AngularJS é o funcionamento dos escopos, pois eles são parteda “mágica” do two-way binding.">
+<meta name="keywords" content="api,scope">
+<meta property="og:type" content="article">
+<meta property="og:title" content="$rootScope vs $scope">
+<meta property="og:url" content="https://darlanalv.es/pt/other/eab2c15e81-rootscope-vs-scope/index.html">
+<meta property="og:site_name" content="Darlan Alves">
+<meta property="og:description" content="Uma das coisas que todo front precisa entender sobre o AngularJS é o funcionamento dos escopos, pois eles são parteda “mágica” do two-way binding.">
+<meta property="og:locale" content="pt">
+<meta property="og:image" content="https://darlanalv.es/covers/cover-fb.png">
+<meta property="og:updated_time" content="2019-07-24T11:25:13.400Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="$rootScope vs $scope">
+<meta name="twitter:description" content="Uma das coisas que todo front precisa entender sobre o AngularJS é o funcionamento dos escopos, pois eles são parteda “mágica” do two-way binding.">
+<meta name="twitter:image" content="https://darlanalv.es/covers/cover-fb.png">
+<meta name="twitter:creator" content="@angularjsdev">
+  
+    <link rel="alternative" href="/atom.xml" title="Darlan Alves" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-42218141-2', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <style data-src="/post_files/forms.css"></style>
+</head></html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Darlan Alves</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">On software craftsmanship and other stuff</a>
+        </h2>
+      
+    </div>
+    <div id="header-avatar"></div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://darlanalv.es"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-eab2c15e81-rootscope-vs-scope" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-icon"><img src="/icons/angular.png" /></div>
+
+  <div class="article-meta">
+    <a href="/pt/other/eab2c15e81-rootscope-vs-scope/index.html" class="article-date">
+  <time datetime="2015-09-08T19:33:30.000Z" itemprop="datePublished">2015-09-08</time>
+</a>
+    
+  </div>
+
+  <div class="article-inner">
+    <div class="article-title-box type-angular">
+      
+        <header class="article-header">
+          
+  
+    <h1 class="article-title" itemprop="name">
+      $rootScope vs $scope
+    </h1>
+  
+
+        </header>
+      
+    </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Uma das coisas que todo front precisa entender sobre o AngularJS &#xE9; o funcionamento dos escopos, pois eles s&#xE3;o parte<br>da &#x201C;m&#xE1;gica&#x201D; do two-way binding.</p>
+<a id="more"></a>
+<h2 id="o-que-&#xE9;"><a href="#O-que-e" class="headerlink" title="O que &#xE9;"></a>O que &#xE9;</h2><p>Todo aplicativo come&#xE7;a em um elemento raiz, chamado $rootElement, onde tamb&#xE9;m come&#xE7;a uma hierarquia de objetos que<br>relacionam-se em forma de &#xE1;rvore.</p>
+<p>O mais importante a se entender sobre escopos &#xE9; a heran&#xE7;a por prot&#xF3;tipo, que &#xE9; um recurso da linguagem Javascript e<br>n&#xE3;o do framework. Todo escopo do aplicativo (exceto os isolados) herda caracter&#xED;sticas do escopo que o originou, e<br>todos os escopos herdam de ou apontam para o $rootScope.</p>
+<p>DICA: j&#xE1; que todos os escopos herdam valores do $rootScope, n&#xE3;o &#xE9; uma boa pr&#xE1;tica associar coisas ao $rootScope, j&#xE1;<br>que esses dados s&#xE3;o propagados no aplicativo inteiro. Se voc&#xEA; estiver usando um c&#xF3;digo como esse, tome bastante cuidado:</p>
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="meta"><span class="meta-keyword">$rootScope</span>.name = value;</span></span><br></pre></td></tr></table></figure>
+<h2 id="scope"><a href="#Scope" class="headerlink" title="Scope"></a>Scope</h2><p>O constructor interno do AngularJS, chamado Scope, &#xE9; a base de todos os escopos do aplicativo, e tem alguns m&#xE9;todos no<br>seu prot&#xF3;tipo. Os mais importantes s&#xE3;o $watch, $watchCollection, $on, $emit e $broadcast. Os detalhes de cada um deles<br>pode ser visto na documenta&#xE7;&#xE3;o oficial.</p>
+<h2 id="rootscope"><a href="#rootScope" class="headerlink" title="$rootScope"></a>$rootScope</h2><p>O $rootScope &#xE9; uma inst&#xE2;ncia de Scope, criado quando o aplicativo &#xE9; executado. Todo escopo da aplica&#xE7;&#xE3;o ter&#xE1; uma liga&#xE7;&#xE3;o<br>com essa inst&#xE2;ncia, direta ou indiretamente.</p>
+<h2 id="scope"><a href="#scope" class="headerlink" title="$scope"></a>$scope</h2><p>Todo elemento da p&#xE1;gina dentro de um aplicativo com AngularJS est&#xE1; ligado a um escopo.</p>
+<p>O framework fornece algumas formas de interagir com esses objetos, e uma delas &#xE9; o Controller. O escopo na verdade &#xE9;<br>uma &#x201C;cola&#x201D; entre o DOM (View) e o modelo de dados (Model). Por isso, dizemos que o AngularJS &#xE9; um framework<br>MVVM (Model, View e View-Model). Diferentemente do modelo MVC, em que o Controller &#xE9; uma camada independente,<br>no AngularJS temos um controller que somente aumenta as propriedades do escopo.</p>
+<p>Al&#xE9;m dos controllers, temos um elemento especial framework, chamado de diretiva, que tamb&#xE9;m tem o poder de interagir<br>com esses objetos, ou at&#xE9; requisitar um novo escopo para si, criando uma nova &#xE1;rvore de propriedades herdadas.</p>
+<h2 id="isolated-scope"><a href="#Isolated-Scope" class="headerlink" title="Isolated Scope"></a>Isolated Scope</h2><p>Algumas diretivas podem requisitar um tipo especial de escopo, que n&#xE3;o herda propriedades do $rootScope. Essas<br>diretivas ainda t&#xEA;m liga&#xE7;&#xE3;o com o root, somente a heran&#xE7;a por prot&#xF3;tipo que muda.</p>
+<p>Esse tipo de isolamento &#xE9; muito &#xFA;til quando criamos componentes reus&#xE1;veis para nossos apps. Para poder criar componentes<br>que n&#xE3;o conhecem o ambiente ao seu redor, mas que ainda possam interagir com os escopos, deve-se usar o sistema de eventos do escopo.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://darlanalv.es/pt/other/eab2c15e81-rootscope-vs-scope/index.html" data-id="cjyh72g3g000mpjid4cb8907d" class="article-share-link">Share</a>
+      
+        <a href="https://darlanalv.es/pt/other/eab2c15e81-rootscope-vs-scope/index.html#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/api/">api</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/scope/">scope</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/pt/other/d0dab594bc-scope-apply-digest-cycles/index.html" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Escopos, $apply(), $digest e digest cycle
+        
+      </div>
+    </a>
+  
+  
+    <a href="/pt/other/e267c37f88-diferencas-entre-data-bindings-do-angular/index.html" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Diferenças entre os data bindings do AngularJS</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<section id="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/api/">api</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/architecture/">architecture</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/books/">books</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/components/">components</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/es5/">es5</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/es6/">es6</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/experiments/">experiments</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/npm/">npm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/patterns/">patterns</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/promises/">promises</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/random/">random</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/route/">route</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scope/">scope</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/states/">states</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tools/">tools</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/angular/" style="font-size: 10px;">angular</a> <a href="/tags/api/" style="font-size: 20px;">api</a> <a href="/tags/architecture/" style="font-size: 13.33px;">architecture</a> <a href="/tags/books/" style="font-size: 10px;">books</a> <a href="/tags/components/" style="font-size: 10px;">components</a> <a href="/tags/es5/" style="font-size: 10px;">es5</a> <a href="/tags/es6/" style="font-size: 10px;">es6</a> <a href="/tags/experiments/" style="font-size: 10px;">experiments</a> <a href="/tags/npm/" style="font-size: 10px;">npm</a> <a href="/tags/patterns/" style="font-size: 10px;">patterns</a> <a href="/tags/promises/" style="font-size: 10px;">promises</a> <a href="/tags/random/" style="font-size: 10px;">random</a> <a href="/tags/route/" style="font-size: 10px;">route</a> <a href="/tags/scope/" style="font-size: 16.67px;">scope</a> <a href="/tags/states/" style="font-size: 10px;">states</a> <a href="/tags/tools/" style="font-size: 10px;">tools</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">11</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/en/other/58184a8ee2-exporting-Node-JS-modules-in-babel-6-x/index.html">Exporting Node.JS modules in Babel 6.x</a>
+          </li>
+        
+          <li>
+            <a href="/en/other/f3141b32ea-Start-using-npm3-today/index.html">Start using npm3 today!</a>
+          </li>
+        
+          <li>
+            <a href="/en/other/5ef343fc57-start-using-components-today/index.html">Start using components in AngularJS today!</a>
+          </li>
+        
+          <li>
+            <a href="/en/other/598ccc3f91-Using-ES5-getters-setters-with-prototype/index.html">Using ES5 getters/setters with prototype</a>
+          </li>
+        
+          <li>
+            <a href="/en/other/9afc461a59-Scalable-Javascript-application-architecture/index.html">Scalable Javascript application architecture</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    <div class="widget-wrap contact-widget">
+  <h3 class="widget-title">Contact</h3>
+  <div class="widget">
+    
+    <a class="icon icon-tw" target="_blank" href="http://twitter.com/angularjsdev" title="Twitter"></a>
+    
+
+    
+    <a class="icon icon-fb" target="_blank" href="http://fb.com/darlanalv.es" title="Facebook"></a>
+    
+
+    
+    <a class="icon icon-gh" target="_blank" href="http://github.com/darlanalves" title="GitHub"></a>
+    
+
+    
+    <a class="icon icon-email" href="mailto:me@darlanalv.es" title="E-mail"></a>
+    
+
+    
+    <a class="icon icon-resume" href="https://darlanalv.es/resume.pdf" title="Resume"></a>
+    
+  </div>
+</div>
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Darlan Alves<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.<br>
+      <small>Header image from <a href="http://linux-shines.deviantart.com/art/Tree-and-Stars-original-with-original-resolution-446470036">deviantart</a></small>
+    </div>
+  </div>
+
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'darlanalves';
+  
+  var disqus_url = 'https://darlanalv.es/pt/other/eab2c15e81-rootscope-vs-scope/index.html';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="https://cdn.rawgit.com/darlanalves/uloader/master/dist/uloader.js"></script>
+<script>$(function() {
+  var loader = new Uloader();
+  var files = ['https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js'];
+
+  $('script[data-src], style[data-src]').each(function() {
+    var src = $(this).attr('data-src') || '';
+
+    if (src) { files.push(src); }
+  });
+
+  loader.load(files).then(function() {
+    $('[data-app]').each(function() {
+      var appName = $(this).attr('data-app') || 'ng';
+      angular.bootstrap(this, [appName]);
+    });
+  }).catch(function(error) {
+    console.log('Failed to run demos:', error);
+  });
+});
+</script>
+  </div>
+</body>
+</html>

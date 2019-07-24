@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>Module reveal pattern com AngularJS | Darlan Alves</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Ao escrever services no AngularJS, um pattern conhecido como “Module Reveal” é muito utilizado. Você talvez até tenhausado sem saber.">
+<meta name="keywords" content="patterns">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Module reveal pattern com AngularJS">
+<meta property="og:url" content="https://darlanalv.es/pt/other/f965f51ca1-module-reveal-pattern-no-angular/index.html">
+<meta property="og:site_name" content="Darlan Alves">
+<meta property="og:description" content="Ao escrever services no AngularJS, um pattern conhecido como “Module Reveal” é muito utilizado. Você talvez até tenhausado sem saber.">
+<meta property="og:locale" content="pt">
+<meta property="og:image" content="https://darlanalv.es/covers/cover-fb.png">
+<meta property="og:updated_time" content="2019-07-24T11:25:13.400Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Module reveal pattern com AngularJS">
+<meta name="twitter:description" content="Ao escrever services no AngularJS, um pattern conhecido como “Module Reveal” é muito utilizado. Você talvez até tenhausado sem saber.">
+<meta name="twitter:image" content="https://darlanalv.es/covers/cover-fb.png">
+<meta name="twitter:creator" content="@angularjsdev">
+  
+    <link rel="alternative" href="/atom.xml" title="Darlan Alves" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-42218141-2', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <style data-src="/post_files/forms.css"></style>
+</head></html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Darlan Alves</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">On software craftsmanship and other stuff</a>
+        </h2>
+      
+    </div>
+    <div id="header-avatar"></div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://darlanalv.es"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-f965f51ca1-module-reveal-pattern-no-angular" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-icon"><img src="/icons/angular.png" /></div>
+
+  <div class="article-meta">
+    <a href="/pt/other/f965f51ca1-module-reveal-pattern-no-angular/index.html" class="article-date">
+  <time datetime="2015-09-08T20:15:10.000Z" itemprop="datePublished">2015-09-08</time>
+</a>
+    
+  </div>
+
+  <div class="article-inner">
+    <div class="article-title-box type-angular">
+      
+        <header class="article-header">
+          
+  
+    <h1 class="article-title" itemprop="name">
+      Module reveal pattern com AngularJS
+    </h1>
+  
+
+        </header>
+      
+    </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Ao escrever <em>services</em> no AngularJS, um pattern conhecido como &#x201C;Module Reveal&#x201D; &#xE9; muito utilizado. Voc&#xEA; talvez at&#xE9; tenha<br>usado sem saber.</p>
+<a id="more"></a>
+<p>Esse pattern &#xE9; uma t&#xE9;cnica usada para esconder fun&#xE7;&#xF5;es usadas localmente no servi&#xE7;o ou propriedades, deixando p&#xFA;blico<br>s&#xF3; o que representa a API ou a interface de um servi&#xE7;o.</p>
+<p>Para exemplificar, vamos criar um servi&#xE7;o que controla sess&#xE3;o e faz login/logout de um usu&#xE1;rio. Primeiro, vou escrever<br>somente o &#x201C;esqueleto&#x201D; do que vai ser o c&#xF3;digo:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">AuthService</span><span class="params">()</span> </span>{</span><br><span class="line">	<span class="keyword">var</span> $logged = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">login</span><span class="params">(email, password)</span> </span>{}</span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">logout</span><span class="params">()</span> </span>{}</span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">isLogged</span><span class="params">()</span> </span>{}</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>Olhando para esse trecho, d&#xE1; pra ver que o <em>service</em> vai receber um email e senha para autenticar um usu&#xE1;rio, tem um<br>m&#xE9;todo para encerrar a sess&#xE3;o e outro que retorna se algu&#xE9;m executou o login.</p>
+<p>At&#xE9; agora, esse servi&#xE7;o ainda n&#xE3;o &#xE9; v&#xE1;lido, pois nossa fun&#xE7;&#xE3;o n&#xE3;o retorna nem associa essas fun&#xE7;&#xF5;es com nenhum valor.<br>Uma forma de tornar esse servi&#xE7;o v&#xE1;lido seria associando cada fun&#xE7;&#xE3;o com a inst&#xE2;ncia atual do servi&#xE7;o, como est&#xE1; abaixo:</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">AuthService</span><span class="params">()</span> </span>{</span><br><span class="line">	<span class="keyword">var</span> $logged = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">this</span>.login = <span class="function"><span class="keyword">function</span> <span class="title">login</span><span class="params">()</span> </span>{};</span><br><span class="line">	<span class="keyword">this</span>.logout = <span class="function"><span class="keyword">function</span> <span class="title">logout</span><span class="params">()</span> </span>{};</span><br><span class="line">	<span class="keyword">this</span>.isLogged = <span class="function"><span class="keyword">function</span> <span class="title">isLogged</span><span class="params">()</span> </span>{};</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>No trecho acima, todas as fun&#xE7;&#xF5;es est&#xE3;o expostas no servi&#xE7;o para uso em outro lugar. Por&#xE9;m, tem uma forma de fazer isso<br>que eu gosto de usar em todo servi&#xE7;o que eu escrevo. Em vez de associar uma a uma cada propriedade, eu crio a &#x201C;interface&#x201D;<br>inteira do servi&#xE7;o de uma vez s&#xF3;.</p>
+<p>Continuando o exemplo acima, vamos adicionar uma fun&#xE7;&#xE3;o que valida o email informado. Tamb&#xE9;m vamos executar <code>logout()</code><br>antes de efetuar um novo login. Note que eu vou usar as fun&#xE7;&#xF5;es dentro do pr&#xF3;prio servi&#xE7;o e tamb&#xE9;m exportar algumas<br>delas como interfaces &#x201C;p&#xFA;blicas&#x201D; do nosso servi&#xE7;o:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">AuthService</span><span class="params">()</span> </span>{</span><br><span class="line">	<span class="keyword">var</span> $logged = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">checkEmail</span><span class="params">(email)</span> </span>{ <span class="comment">/* ... */</span> }</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">login</span><span class="params">(email, password)</span> </span>{</span><br><span class="line">		<span class="keyword">if</span> (!checkEmail(email)) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">		logout();</span><br><span class="line"></span><br><span class="line">		<span class="comment">/* ... */</span></span><br><span class="line"></span><br><span class="line">		$logged = <span class="keyword">true</span>;</span><br><span class="line">	}</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">logout</span><span class="params">()</span> </span>{ <span class="comment">/* ... */</span> }</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">isLogged</span><span class="params">()</span> </span>{ <span class="keyword">return</span> $logged; }</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> {</span><br><span class="line">		login: login,</span><br><span class="line">		logout: logout,</span><br><span class="line">		isLogged: isLogged</span><br><span class="line">	};</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>Ao final da <em>factory</em> <code>AuthService</code> eu retornei um objeto que ser&#xE1; a API p&#xFA;blica desse servi&#xE7;o. Essa t&#xE9;cnica de<br>&#x201C;revelar&#x201D; somente algumas propriedades ou m&#xE9;todos &#xE9; o que chamamos de <strong>Module Reveal</strong> pattern.</p>
+<p>Pronto! Agora voc&#xEA; j&#xE1; sabe mais um design pattern! Toca aqui \o.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://darlanalv.es/pt/other/f965f51ca1-module-reveal-pattern-no-angular/index.html" data-id="cjyh72g3g000opjidah2v243f" class="article-share-link">Share</a>
+      
+        <a href="https://darlanalv.es/pt/other/f965f51ca1-module-reveal-pattern-no-angular/index.html#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/patterns/">patterns</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/en/other/02f284d71d-IPFS-and-a-decentralized-web/index.html" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          IPFS and a decentralized web
+        
+      </div>
+    </a>
+  
+  
+    <a href="/pt/other/a896622b82-usando-http-no-Angular/index.html" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Usando $http no AngularJS</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<section id="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/api/">api</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/architecture/">architecture</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/books/">books</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/components/">components</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/es5/">es5</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/es6/">es6</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/experiments/">experiments</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/npm/">npm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/patterns/">patterns</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/promises/">promises</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/random/">random</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/route/">route</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scope/">scope</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/states/">states</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tools/">tools</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/angular/" style="font-size: 10px;">angular</a> <a href="/tags/api/" style="font-size: 20px;">api</a> <a href="/tags/architecture/" style="font-size: 13.33px;">architecture</a> <a href="/tags/books/" style="font-size: 10px;">books</a> <a href="/tags/components/" style="font-size: 10px;">components</a> <a href="/tags/es5/" style="font-size: 10px;">es5</a> <a href="/tags/es6/" style="font-size: 10px;">es6</a> <a href="/tags/experiments/" style="font-size: 10px;">experiments</a> <a href="/tags/npm/" style="font-size: 10px;">npm</a> <a href="/tags/patterns/" style="font-size: 10px;">patterns</a> <a href="/tags/promises/" style="font-size: 10px;">promises</a> <a href="/tags/random/" style="font-size: 10px;">random</a> <a href="/tags/route/" style="font-size: 10px;">route</a> <a href="/tags/scope/" style="font-size: 16.67px;">scope</a> <a href="/tags/states/" style="font-size: 10px;">states</a> <a href="/tags/tools/" style="font-size: 10px;">tools</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">11</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/en/other/58184a8ee2-exporting-Node-JS-modules-in-babel-6-x/index.html">Exporting Node.JS modules in Babel 6.x</a>
+          </li>
+        
+          <li>
+            <a href="/en/other/f3141b32ea-Start-using-npm3-today/index.html">Start using npm3 today!</a>
+          </li>
+        
+          <li>
+            <a href="/en/other/5ef343fc57-start-using-components-today/index.html">Start using components in AngularJS today!</a>
+          </li>
+        
+          <li>
+            <a href="/en/other/598ccc3f91-Using-ES5-getters-setters-with-prototype/index.html">Using ES5 getters/setters with prototype</a>
+          </li>
+        
+          <li>
+            <a href="/en/other/9afc461a59-Scalable-Javascript-application-architecture/index.html">Scalable Javascript application architecture</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    <div class="widget-wrap contact-widget">
+  <h3 class="widget-title">Contact</h3>
+  <div class="widget">
+    
+    <a class="icon icon-tw" target="_blank" href="http://twitter.com/angularjsdev" title="Twitter"></a>
+    
+
+    
+    <a class="icon icon-fb" target="_blank" href="http://fb.com/darlanalv.es" title="Facebook"></a>
+    
+
+    
+    <a class="icon icon-gh" target="_blank" href="http://github.com/darlanalves" title="GitHub"></a>
+    
+
+    
+    <a class="icon icon-email" href="mailto:me@darlanalv.es" title="E-mail"></a>
+    
+
+    
+    <a class="icon icon-resume" href="https://darlanalv.es/resume.pdf" title="Resume"></a>
+    
+  </div>
+</div>
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Darlan Alves<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.<br>
+      <small>Header image from <a href="http://linux-shines.deviantart.com/art/Tree-and-Stars-original-with-original-resolution-446470036">deviantart</a></small>
+    </div>
+  </div>
+
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'darlanalves';
+  
+  var disqus_url = 'https://darlanalv.es/pt/other/f965f51ca1-module-reveal-pattern-no-angular/index.html';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="https://cdn.rawgit.com/darlanalves/uloader/master/dist/uloader.js"></script>
+<script>$(function() {
+  var loader = new Uloader();
+  var files = ['https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js'];
+
+  $('script[data-src], style[data-src]').each(function() {
+    var src = $(this).attr('data-src') || '';
+
+    if (src) { files.push(src); }
+  });
+
+  loader.load(files).then(function() {
+    $('[data-app]').each(function() {
+      var appName = $(this).attr('data-app') || 'ng';
+      angular.bootstrap(this, [appName]);
+    });
+  }).catch(function(error) {
+    console.log('Failed to run demos:', error);
+  });
+});
+</script>
+  </div>
+</body>
+</html>

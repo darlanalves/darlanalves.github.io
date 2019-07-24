@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>Promises | Darlan Alves</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Promise não é um conceito novo do AngularJS. Elas já existiam em libs como o jQuery antes do framework nascer.No entanto, entendê-las é essencial para desenvolver web apps.">
+<meta name="keywords" content="api,promises">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Promises">
+<meta property="og:url" content="https://darlanalv.es/pt/other/ce2bd42d9e-promises/index.html">
+<meta property="og:site_name" content="Darlan Alves">
+<meta property="og:description" content="Promise não é um conceito novo do AngularJS. Elas já existiam em libs como o jQuery antes do framework nascer.No entanto, entendê-las é essencial para desenvolver web apps.">
+<meta property="og:locale" content="pt">
+<meta property="og:image" content="https://darlanalv.es/covers/cover-fb.png">
+<meta property="og:updated_time" content="2019-07-24T11:25:13.400Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Promises">
+<meta name="twitter:description" content="Promise não é um conceito novo do AngularJS. Elas já existiam em libs como o jQuery antes do framework nascer.No entanto, entendê-las é essencial para desenvolver web apps.">
+<meta name="twitter:image" content="https://darlanalv.es/covers/cover-fb.png">
+<meta name="twitter:creator" content="@angularjsdev">
+  
+    <link rel="alternative" href="/atom.xml" title="Darlan Alves" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-42218141-2', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <style data-src="/post_files/forms.css"></style>
+</head></html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Darlan Alves</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">On software craftsmanship and other stuff</a>
+        </h2>
+      
+    </div>
+    <div id="header-avatar"></div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://darlanalv.es"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-ce2bd42d9e-promises" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-icon"><img src="/icons/angular.png" /></div>
+
+  <div class="article-meta">
+    <a href="/pt/other/ce2bd42d9e-promises/index.html" class="article-date">
+  <time datetime="2015-09-08T19:45:41.000Z" itemprop="datePublished">2015-09-08</time>
+</a>
+    
+  </div>
+
+  <div class="article-inner">
+    <div class="article-title-box type-angular">
+      
+        <header class="article-header">
+          
+  
+    <h1 class="article-title" itemprop="name">
+      Promises
+    </h1>
+  
+
+        </header>
+      
+    </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Promise n&#xE3;o &#xE9; um conceito novo do AngularJS. Elas j&#xE1; existiam em libs como o jQuery antes do framework nascer.<br>No entanto, entend&#xEA;-las &#xE9; essencial para desenvolver web apps.</p>
+<a id="more"></a>
+<p>Promise &#xE9; exatamente o que este termo significa: uma promessa! Quando trabalhamos com requisi&#xE7;&#xF5;es HTTP ou com<br>callbacks, as coisas podem dar certo ou errado em um momento futuro que desconhecemos. Para exemplificar, vamos<br>crirar uma hist&#xF3;ria e pensar em um an&#xE1;logo do dia a dia: a previs&#xE3;o do tempo.</p>
+<p>Hoje pela manh&#xE3; eu precisei tomar uma decis&#xE3;o: sair de casa com ou sem guarda-chuva. Quando eu olhei pela janela, o<br>tempo parecia bom, mas tinha algumas nuvens indicando que eu poderia me enganar. Pra me garantir, j&#xE1; que eu tenho<br>um azar pra essas coisas, seria melhor verificar a previs&#xE3;o do tempo e pensar nas possibilidades, ou em linguagem<br>de programador, tratar as exce&#xE7;&#xF5;es.</p>
+<p>Vamos tentar escrever essas possibilidades em forma de um objeto Promise, tratando a exce&#xE7;&#xE3;o. O AngularJS j&#xE1; vem<br>com uma implementa&#xE7;&#xE3;o das Promises, em um servi&#xE7;o chamado $q. Este servi&#xE7;o tem um m&#xE9;todo, chamado defer, que retorna<br>um objeto Deferred. &#xC9; com ele que vamos criar nossa &#x201C;promessa&#x201D;:</p>
+<p>Service: PrevisaoDoTempo</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">angular.module(<span class="string">&apos;myApp&apos;</span>).factory(<span class="string">&apos;PrevisaoDoTempo&apos;</span>, <span class="function"><span class="keyword">function</span> <span class="params">($q)</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">previsaoDoTempo</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="comment">// m&#xE9;todo m&#xE1;gico que verifica a previs&#xE3;o do tempo em algum lugar</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> {</span><br><span class="line">            temperatura: <span class="number">20</span>,</span><br><span class="line">            umidade: <span class="number">40</span>,</span><br><span class="line">            chuva: <span class="keyword">false</span></span><br><span class="line">        };</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">hojeTemTempoBom</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">var</span> deferred = $q.defer();</span><br><span class="line"></span><br><span class="line">        previsao = previsaoDoTempo();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (previsao.chuva === <span class="keyword">false</span>) {</span><br><span class="line">            deferred.resolve(previsao);</span><br><span class="line">        } <span class="keyword">else</span> {</span><br><span class="line">            deferred.reject(previsao)</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> deferred.promise;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> {</span><br><span class="line">        hojeTemTempoBom: hojeTemTempoBom</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">});</span><br></pre></td></tr></table></figure>
+<p>Controller: PegarGuardaChuva</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">angular.module(<span class="string">&apos;myApp&apos;</span>).controller(<span class="string">&apos;PegarGuardaChuva&apos;</span>, <span class="function"><span class="keyword">function</span> <span class="params">(PrevisaoDoTempo)</span> </span>{</span><br><span class="line">    PrevisaoDoTempo.hojeTemTempoBom().then(<span class="function"><span class="keyword">function</span> <span class="params">(tempoBom)</span> </span>{</span><br><span class="line"></span><br><span class="line">        <span class="comment">// esque&#xE7;a o guarda-chuva, n&#xE3;o vai chover hoje!</span></span><br><span class="line">        <span class="comment">// A promessa de tempo bom foi garantida</span></span><br><span class="line"></span><br><span class="line">    }, <span class="function"><span class="keyword">function</span> <span class="params">(previsaoDeChuva)</span> </span>{</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Opa! Deu problema no m&#xE9;todo e a promessa de tempo bom foi rejeitada</span></span><br><span class="line"></span><br><span class="line">    }).<span class="keyword">finally</span>(<span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="comment">// Decis&#xE3;o tomada! Agora eu posso sair de casa</span></span><br><span class="line">    });</span><br><span class="line">});</span><br></pre></td></tr></table></figure>
+<h2 id="api-em-detalhes"><a href="#API-em-detalhes" class="headerlink" title="API em detalhes"></a>API em detalhes</h2><h3 id="promise"><a href="#Promise" class="headerlink" title="Promise"></a>Promise</h3><p>N&#xF3;s criamos um servi&#xE7;o para buscar a previs&#xE3;o do tempo. Este servi&#xE7;o tem um m&#xE9;todo hojeTemTempoBom que retorna uma<br>Promise. Este objeto retornado (a Promise) tamb&#xE9;m tem alguns m&#xE9;todos. O mais usado &#xE9; o .then(), que recebe tr&#xEA;s<br>argumentos: uma fun&#xE7;&#xE3;o, que ser&#xE1; executada se tudo der certo (vamos chamar de callback), outra fun&#xE7;&#xE3;o, que ser&#xE1;<br>executada se algum erro ocorrer (vamos chamar de errorback), e finalmente uma fun&#xE7;&#xE3;o chamada sempre que o<br>progresso da resolu&#xE7;&#xE3;o muda (que vamos chamar de notifier). Este comportamento &#xE9; an&#xE1;logo a um bloco<br>try/catch/finally. Existe ainda um callback chamado depois que promise &#xE9; despachada, tanto com sucesso quanto com erro.</p>
+<p>Os argumentos passados para .then() s&#xE3;o opcionais. Voc&#xEA; pode pular um argumento usando <code>null</code></p>
+<p>Como citei anteriormente, a sintaxe da Promise simula o tratamento de exce&#xE7;&#xF5;es. Veja no exemplo abaixo:</p>
+<figure class="highlight ceylon"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// m&#xE9;todo padr&#xE3;o</span></span><br><span class="line">promise.<span class="keyword">then</span>(callback, errorback, notifier).<span class="keyword">finally</span>(cleanup);</span><br><span class="line"></span><br><span class="line"><span class="comment">// sintaxe alternativa</span></span><br><span class="line">promise</span><br><span class="line">    .<span class="keyword">then</span>(callback, null, notifier)</span><br><span class="line">    .<span class="keyword">catch</span>(errorback)</span><br><span class="line">    .<span class="keyword">finally</span>(cleanup);</span><br><span class="line"></span><br><span class="line"><span class="comment">// callback &#xE9; chamado se tudo ocorrer bem</span></span><br><span class="line"><span class="comment">// errorback &#xE9; chamado se algum erro ocorrer</span></span><br><span class="line"><span class="comment">// durante a resolu&#xE7;&#xE3;o, podemos notificar o progresso atrav&#xE9;s do notifier</span></span><br><span class="line"><span class="comment">// depois da resolu&#xE7;&#xE3;o ou rejei&#xE7;&#xE3;o, cleanup &#xE9; chamado para terminar o processamento</span></span><br></pre></td></tr></table></figure>
+<h3 id="deferred"><a href="#Deferred" class="headerlink" title="Deferred"></a>Deferred</h3><p>Chamando $q.defer() n&#xF3;s criamos um objeto Deferred, que tem 3 m&#xE9;todos: resolve(result), reject(reason) e<br>notify(progress). Veja os detalhes abaixo:</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> deferred = <span class="variable">$q</span>.defer();</span><br><span class="line"></span><br><span class="line"><span class="comment">// resolve a Promise, invocando nosso callback</span></span><br><span class="line">deferred.resolve(result);</span><br><span class="line"></span><br><span class="line"><span class="comment">// rejeita a Promise, invocando nosso errorback (seria o mesmo que um comando throw)</span></span><br><span class="line">deferred.reject(<span class="keyword">error</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// notifica sobre o progresso da Promise</span></span><br><span class="line">deferred.notify(progress)</span><br></pre></td></tr></table></figure>
+<h2 id="voltando-ao-controller"><a href="#Voltando-ao-controller" class="headerlink" title="Voltando ao controller"></a>Voltando ao controller</h2><p>No nosso controller eu fiz o tratamento da exce&#xE7;&#xE3;o. Se a previs&#xE3;o do tempo for de sol, n&#xF3;s continuamos para a<br> primeira fun&#xE7;&#xE3;o, deixando o guarda-chuva em casa. Se a previs&#xE3;o for de chuva, consideramos isso como uma &#x201C;exce&#xE7;&#xE3;o&#x201D;,<br>  e vamos pela segunda fun&#xE7;&#xE3;o para lidar com este caso.</p>
+<p>Vou reescrever nosso controller, agora com uma sintaxe que seria executada de forma s&#xED;ncrona. O funcionamento &#xE9;<br>equivalente ao da Promise, por&#xE9;m n&#xF3;s usaremos try/catch/finally e uma exce&#xE7;&#xE3;o:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">angular.module(<span class="string">&apos;myApp&apos;</span>).controller(<span class="string">&apos;PegarGuardaChuva&apos;</span>, <span class="function"><span class="keyword">function</span> <span class="params">(PrevisaoDoTempo)</span> </span>{</span><br><span class="line">    <span class="keyword">try</span> {</span><br><span class="line">        <span class="keyword">var</span> tempoBom = PrevisaoDoTempo.hojeTemTempoBom();</span><br><span class="line">        <span class="comment">// esque&#xE7;a o guarda-chuva, n&#xE3;o vai chover hoje!</span></span><br><span class="line">        <span class="comment">// A promessa de tempo bom foi garantida</span></span><br><span class="line">    } <span class="keyword">catch</span> (previsaoDeChuva) {</span><br><span class="line">        <span class="comment">// Opa! Deu problema no m&#xE9;todo e a promessa de tempo bom foi rejeitada</span></span><br><span class="line">    } <span class="keyword">finally</span> {</span><br><span class="line">        <span class="comment">// Decis&#xE3;o tomada! Agora eu posso sair de casa</span></span><br><span class="line">    }</span><br><span class="line">});</span><br></pre></td></tr></table></figure>
+<p>Vou reescrever tamb&#xE9;m o servi&#xE7;o, para lan&#xE7;ar uma exce&#xE7;&#xE3;o em vez de retornar uma Promise:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">angular.module(<span class="string">&apos;myApp&apos;</span>).factory(<span class="string">&apos;PrevisaoDoTempo&apos;</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">previsaoDoTempo</span>(<span class="params"></span>) </span>{</span><br><span class="line">        <span class="keyword">return</span> {</span><br><span class="line">            temperatura: <span class="number">20</span>,</span><br><span class="line">            umidade: <span class="number">40</span>,</span><br><span class="line">            chuva: <span class="literal">false</span></span><br><span class="line">        };</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">hojeTemTempoBom</span>(<span class="params"></span>) </span>{</span><br><span class="line">        previsao = previsaoDoTempo();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (previsao.chuva === <span class="literal">false</span>) {</span><br><span class="line">            <span class="keyword">return</span> previsao;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">&apos;Vai chover!&apos;</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> {</span><br><span class="line">        hojeTemTempoBom: hojeTemTempoBom</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">});</span><br></pre></td></tr></table></figure>
+<p>Note que agora tudo &#xE9; linear: n&#xF3;s pegamos a previs&#xE3;o, retornamos um valor (ou lan&#xE7;amos uma exce&#xE7;&#xE3;o) e o controlador<br>trata isso de forma linear tamb&#xE9;m.</p>
+<p>A vantagem das promises &#xE9; n&#xE3;o ter que esperar pela resposta de um m&#xE9;todo para continuar. Eventualmente, a resposta<br>vai existir, e s&#xF3; ent&#xE3;o n&#xF3;s precisaremos lidar com ela. Dessa forma nossos aplicativos podem responder mais r&#xE1;pido<br>visualmente, sem ter que travar a tela para o usu&#xE1;rio.</p>
+<h2 id="usando-uma-cadeia-de-promessas-promise-chain"><a href="#Usando-uma-cadeia-de-promessas-Promise-chain" class="headerlink" title="Usando uma cadeia de promessas: Promise chain"></a>Usando uma cadeia de promessas: Promise chain</h2><p>A sintaxe de Promise n&#xE3;o se limita a um callback. Podemos fazer uma cadeia de fun&#xE7;&#xF5;es sendo chamadas em sequ&#xEA;ncia.<br>Vamos mudar um pouco nosso exemplo e adicionar mais a&#xE7;&#xF5;es ao final da Promise:</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// considere que esses par&#xE2;metros s&#xE3;o fun&#xE7;&#xF5;es</span></span><br><span class="line"><span class="selector-tag">PrevisaoDoTempo</span><span class="selector-class">.hojeTemTempoBom</span>()</span><br><span class="line">    <span class="selector-class">.then</span>(deixarGuardaChuva)</span><br><span class="line">    <span class="selector-class">.then</span>(pegarOculosSolar)</span><br><span class="line">    <span class="selector-class">.then</span>(fecharCortinas)</span><br><span class="line"></span><br><span class="line">    <span class="selector-class">.catch</span>(pegarGuardaChuva)</span><br><span class="line"></span><br><span class="line">    <span class="selector-class">.finally</span>(sairDeCasa);</span><br></pre></td></tr></table></figure>
+<p>Um detalhe muito importante sobre promise chain: o valor que uma fun&#xE7;&#xE3;o retorna &#xE9; passado para a pr&#xF3;xima fun&#xE7;&#xE3;o da<br>lista. Se uma fun&#xE7;&#xE3;o que trata erros (no bloco catch) retornar um valor qualquer, a promise N&#xC3;O &#xE9; mais considerada<br>como rejeitada, voltando para o status de &#x201C;resolved&#x201D;. Para tratar uma exce&#xE7;&#xE3;o e continuar rejeitando valores,<br>precisamos usar uma sintaxe especial. Acompanhe abaixo o uso do m&#xE9;todo $q.reject():</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// considere que esses par&#xE2;metros s&#xE3;o fun&#xE7;&#xF5;es</span></span><br><span class="line">PrevisaoDoTempo.hojeTemTempoBom()</span><br><span class="line">    .then(deixarGuardaChuva)</span><br><span class="line">    .then(pegarOculosSolar)</span><br><span class="line">    .then(fecharCortinas)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// todas estas fun&#xE7;&#xF5;es precisam retornar um valor especial!</span></span><br><span class="line">    .<span class="keyword">catch</span>(pegarGuardaChuva)</span><br><span class="line">    .<span class="keyword">catch</span>(fecharAsJanelas)</span><br><span class="line">    .<span class="keyword">catch</span>(deixarOsOculos)</span><br><span class="line"></span><br><span class="line">    .<span class="keyword">finally</span>(sairDeCasa);</span><br><span class="line"></span><br><span class="line"><span class="comment">// exemplo de continua&#xE7;&#xE3;o do erro</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">pegarGuardaChuva</span><span class="params">(previsao)</span> </span>{</span><br><span class="line">    <span class="comment">// fa&#xE7;a alguma coisa com o erro e continue rejeitando</span></span><br><span class="line">    <span class="keyword">return</span> $q.reject(previsao);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// exemplo de tratamento de erro (n&#xE3;o quer dizer que deixar os &#xF3;culos vai parar a chuva,</span></span><br><span class="line"><span class="comment">// mas a t&#xED;tulo de exemplo, digamos que sim)</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">deixarOsOculos</span><span class="params">(previsao)</span> </span>{</span><br><span class="line">    <span class="comment">// fa&#xE7;a alguma coisa que reverta o problema</span></span><br><span class="line">    previsao.chuva = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> previsao;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>Uma pr&#xE1;tica que adotei em quase todos os m&#xE9;todos de servi&#xE7;o &#xE9; retornar uma Promise. Vamos ver um caso de uso bem<br>comum: passar um ID para um m&#xE9;todo e pedir que ele busque um item no backend. Usaremos o servi&#xE7;o $http e uma rota<br>hipot&#xE9;tica &#x201C;/item/:itemId&#x201D;.</p>
+<p>Se um ID n&#xE3;o for passado para o m&#xE9;todo, retornamos uma Promise rejeitada. Caso contr&#xE1;rio, buscamos o item no servidor<br>e retornamos a pr&#xF3;pria Promise criada pelo $http:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">$module.factory(<span class="string">&apos;Service&apos;</span>, <span class="function"><span class="keyword">function</span><span class="params">($q, $http)</span> </span>{</span><br><span class="line">    <span class="keyword">return</span> {</span><br><span class="line">        getItem: <span class="function"><span class="keyword">function</span><span class="params">(id)</span> </span>{</span><br><span class="line">            <span class="keyword">if</span> (!id) {</span><br><span class="line">                <span class="keyword">return</span> $q.reject(<span class="keyword">new</span> Error(<span class="string">&apos;Invalid id&apos;</span>));</span><br><span class="line">            }</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> $http.get(<span class="string">&apos;/item/&apos;</span> + id);</span><br><span class="line">        }</span><br><span class="line">    };</span><br><span class="line">});</span><br><span class="line"></span><br><span class="line">$module.controller(<span class="string">&apos;Controller&apos;</span>, <span class="function"><span class="keyword">function</span><span class="params">(Service)</span> </span>{</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    Service.getItem(<span class="number">123</span>).then( successFunction, errorFunction );</span><br><span class="line">});</span><br></pre></td></tr></table></figure>
+<h2 id="syntax-sugar"><a href="#Syntax-sugar" class="headerlink" title="Syntax sugar"></a>Syntax sugar</h2><p>Voc&#xEA; pode unificar as respostas dos servi&#xE7;os retornando uma Promise em todas as chamadas de m&#xE9;todos. Assim, voc&#xEA; n&#xE3;o<br>precisa se preocupar se a resposta vindo do servi&#xE7;o &#xE9; um erro ou o tipo de dados que voc&#xEA; esperava. Voc&#xEA; sempre vai<br>trabalhar com uma promise, mesmo na valida&#xE7;&#xE3;o de inputs.</p>
+<p>Com esse padr&#xE3;o, no exemplo acima o Controller n&#xE3;o precisa se preocupar com mudan&#xE7;as no tipo de resposta do servi&#xE7;o:<br>ele sempre espera uma Promise, e o servi&#xE7;o trata os erros de forma ass&#xED;ncrona, tornando o fluxo de trabalho mais<br>uniforme. O &#x201C;tratamento&#x201D; da exce&#xE7;&#xE3;o &#xE9; feito no service, que s&#xF3; mant&#xE9;m regras de valida&#xE7;&#xE3;o e neg&#xF3;cio, e a intera&#xE7;&#xE3;o<br>com o usu&#xE1;rio (exibir uma mensagem, mudar alguma coisa no escopo, &#x2026;) &#xE9; feita no controller, que &#xE9; respons&#xE1;vel pela<br>intera&#xE7;&#xE3;o entre a view e a camada de servi&#xE7;o.</p>
+<p>Um detalhe interessante: voc&#xEA; pode usar outros m&#xE9;todos do servi&#xE7;o $q para retornar promises sempre, seja um resultado<br>ou um erro. No exemplo abaixo, getFoo() sempre retorna uma Promise:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">app.factory(<span class="string">&apos;FooService&apos;</span>, <span class="function"><span class="keyword">function</span><span class="params">($q, $http)</span> </span>{</span><br><span class="line">    <span class="comment">// assuming you have a cache object like this one</span></span><br><span class="line">    <span class="keyword">var</span> internalCache = {};</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="keyword">return</span> {</span><br><span class="line">        getFoo: <span class="function"><span class="keyword">function</span><span class="params">(fooId)</span> </span>{</span><br><span class="line">            <span class="keyword">if</span> (!fooId) {</span><br><span class="line">                <span class="keyword">return</span> $q.reject(<span class="keyword">new</span> Error(<span class="string">&apos;You forgot fooId&apos;</span>));</span><br><span class="line">            }</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (fooId in internalCache) {</span><br><span class="line">                <span class="keyword">return</span> $q.when(internaCache[fooId]);</span><br><span class="line">            }</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> $http.get(<span class="string">&apos;/foo/&apos;</span> + fooId);</span><br><span class="line">        }</span><br><span class="line">    };</span><br><span class="line">});</span><br></pre></td></tr></table></figure>
+<h2 id="b&#xF4;nus"><a href="#Bonus" class="headerlink" title="B&#xF4;nus"></a>B&#xF4;nus</h2><ul>
+<li><p>Fiz <a href="http://embed.plnkr.co/bQlNjX/preview" target="_blank" rel="noopener">um Plunker com algumas varia&#xE7;&#xF5;es</a> da API de Promises para exemplificar as<br>op&#xE7;&#xF5;es fornecidas pelo AngularJS.</p>
+</li>
+<li><p>E <a href="http://embed.plnkr.co/JH3yzRj3eu3O9CboFQF0/preview" target="_blank" rel="noopener">outro Plunker</a> demonstrando o tratamento de erros dentro do<br>Service.</p>
+</li>
+</ul>
+<p><strong> In promise we trust! </strong></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://darlanalv.es/pt/other/ce2bd42d9e-promises/index.html" data-id="cjyh72g3t001lpjidvhbvwjlb" class="article-share-link">Share</a>
+      
+        <a href="https://darlanalv.es/pt/other/ce2bd42d9e-promises/index.html#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/api/">api</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/promises/">promises</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/pt/other/a896622b82-usando-http-no-Angular/index.html" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Usando $http no AngularJS
+        
+      </div>
+    </a>
+  
+  
+    <a href="/pt/other/41c05887ea-organizando-rotas-stateProvider/index.html" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Uma forma organizada de usar o $stateProvider</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<section id="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/api/">api</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/architecture/">architecture</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/books/">books</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/components/">components</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/es5/">es5</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/es6/">es6</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/experiments/">experiments</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/npm/">npm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/patterns/">patterns</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/promises/">promises</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/random/">random</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/route/">route</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scope/">scope</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/states/">states</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tools/">tools</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/angular/" style="font-size: 10px;">angular</a> <a href="/tags/api/" style="font-size: 20px;">api</a> <a href="/tags/architecture/" style="font-size: 13.33px;">architecture</a> <a href="/tags/books/" style="font-size: 10px;">books</a> <a href="/tags/components/" style="font-size: 10px;">components</a> <a href="/tags/es5/" style="font-size: 10px;">es5</a> <a href="/tags/es6/" style="font-size: 10px;">es6</a> <a href="/tags/experiments/" style="font-size: 10px;">experiments</a> <a href="/tags/npm/" style="font-size: 10px;">npm</a> <a href="/tags/patterns/" style="font-size: 10px;">patterns</a> <a href="/tags/promises/" style="font-size: 10px;">promises</a> <a href="/tags/random/" style="font-size: 10px;">random</a> <a href="/tags/route/" style="font-size: 10px;">route</a> <a href="/tags/scope/" style="font-size: 16.67px;">scope</a> <a href="/tags/states/" style="font-size: 10px;">states</a> <a href="/tags/tools/" style="font-size: 10px;">tools</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">11</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/en/other/58184a8ee2-exporting-Node-JS-modules-in-babel-6-x/index.html">Exporting Node.JS modules in Babel 6.x</a>
+          </li>
+        
+          <li>
+            <a href="/en/other/f3141b32ea-Start-using-npm3-today/index.html">Start using npm3 today!</a>
+          </li>
+        
+          <li>
+            <a href="/en/other/5ef343fc57-start-using-components-today/index.html">Start using components in AngularJS today!</a>
+          </li>
+        
+          <li>
+            <a href="/en/other/598ccc3f91-Using-ES5-getters-setters-with-prototype/index.html">Using ES5 getters/setters with prototype</a>
+          </li>
+        
+          <li>
+            <a href="/en/other/9afc461a59-Scalable-Javascript-application-architecture/index.html">Scalable Javascript application architecture</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    <div class="widget-wrap contact-widget">
+  <h3 class="widget-title">Contact</h3>
+  <div class="widget">
+    
+    <a class="icon icon-tw" target="_blank" href="http://twitter.com/angularjsdev" title="Twitter"></a>
+    
+
+    
+    <a class="icon icon-fb" target="_blank" href="http://fb.com/darlanalv.es" title="Facebook"></a>
+    
+
+    
+    <a class="icon icon-gh" target="_blank" href="http://github.com/darlanalves" title="GitHub"></a>
+    
+
+    
+    <a class="icon icon-email" href="mailto:me@darlanalv.es" title="E-mail"></a>
+    
+
+    
+    <a class="icon icon-resume" href="https://darlanalv.es/resume.pdf" title="Resume"></a>
+    
+  </div>
+</div>
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Darlan Alves<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.<br>
+      <small>Header image from <a href="http://linux-shines.deviantart.com/art/Tree-and-Stars-original-with-original-resolution-446470036">deviantart</a></small>
+    </div>
+  </div>
+
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'darlanalves';
+  
+  var disqus_url = 'https://darlanalv.es/pt/other/ce2bd42d9e-promises/index.html';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="https://cdn.rawgit.com/darlanalves/uloader/master/dist/uloader.js"></script>
+<script>$(function() {
+  var loader = new Uloader();
+  var files = ['https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js'];
+
+  $('script[data-src], style[data-src]').each(function() {
+    var src = $(this).attr('data-src') || '';
+
+    if (src) { files.push(src); }
+  });
+
+  loader.load(files).then(function() {
+    $('[data-app]').each(function() {
+      var appName = $(this).attr('data-app') || 'ng';
+      angular.bootstrap(this, [appName]);
+    });
+  }).catch(function(error) {
+    console.log('Failed to run demos:', error);
+  });
+});
+</script>
+  </div>
+</body>
+</html>
